@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use ReflectionException;
 
 class UserModel extends Model
 {
@@ -12,7 +13,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['name'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -39,4 +40,20 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * @param string $name
+     * @throws ReflectionException
+     */
+    public function create_user(string $name) {
+        $data = [
+            'name' => $name
+        ];
+
+        $this->insert($data);
+    }
+
+    public function delete_user($id) {
+        $this->delete($id);
+    }
 }

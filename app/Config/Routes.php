@@ -6,11 +6,10 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+$routes->get('/home', 'Home::index');
 
 /**
- * Costcenter
+ * User
  */
-$routes->get('/costcenter/create', 'Costcenter::create');
-$routes->get('/costcenter/read', 'Costcenter::read');
-$routes->get('/costcenter/update', 'Costcenter::update');
-$routes->get('/costcenter/delete', 'Costcenter::delete');
+$routes->post('/user/create', 'User::create');
+$routes->post('/user/delete', 'User::delete');

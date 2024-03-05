@@ -10,3 +10,16 @@
 <body>
 
 
+<h2>User</h2>
+<p>Create User</p>
+<form action="/user/create" method="post">
+    <input type="text" name="name">
+    <input type="submit">
+</form>
+
+<p>Delete User with id:</p>
+<form action="/user/delete" method="post">
+    <input type="text" name="id">
+    <input type="submit">
+</form>
+
