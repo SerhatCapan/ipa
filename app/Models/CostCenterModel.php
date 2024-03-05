@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use ReflectionException;
 
 class CostCenterModel extends Model
 {
@@ -12,7 +13,7 @@ class CostCenterModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['name'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -39,4 +40,26 @@ class CostCenterModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    /**
+     * @throws ReflectionException
+     */
+    public function create_costcenter(array $data) {
+        $this->insert($data);
+    }
+
+    public function read_costcenter($data) {
+
+
+        $result = $this->select('*')->get()->getResult;
+
+
+
+        return $result;
+    }
+
+    public function delete_costcenter($id) {
+        $this->delete($id);
+    }
 }

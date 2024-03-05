@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use ReflectionException;
 
-class UserModel extends Model
+class AbsenceModel extends Model
 {
-    protected $table            = 'user';
+    protected $table            = 'absences';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name'];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
 
@@ -40,16 +39,4 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @throws ReflectionException
-     */
-    public function create_user(array $data) {
-        $this->insert($data);
-    }
-
-    public function delete_user($id) {
-        $this->delete($id);
-    }
 }

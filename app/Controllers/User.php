@@ -22,8 +22,11 @@ class User extends BaseController
      */
     public function create()
     {
-        $name = $this->request->getPost('name');
-        $this->user_model->create_user($name);
+        $data = [
+            'name' => $this->request->getPost('name')
+        ];
+
+        $this->user_model->create_user($data);
     }
 
     /**
