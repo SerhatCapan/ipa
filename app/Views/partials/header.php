@@ -16,51 +16,6 @@
     <script src="<?= base_url() ?>/js/uikit-icons.min.js"></script>
 </head>
 <body>
-
-
-
-<!-- forms to test the CRUD functions before design -->
-<h2>Costcenter</h2>
-<p>Create costcenter</p>
-<form action="/costcenter/create" method="post">
-    <input type="text" name="name">
-    <input type="submit">
-</form>
-
-<p>Read Costcenter</p>
 <?php
-$from_date = '2024-03-04';
-$to_date = '2024-03-05';
-?>
-<p>http://ipa.local/costcenter/read?id=2&from_date=<?= $from_date ?>&to_date<?= $to_date ?></p>
-
-<p>Update costcenter</p>
-<form action="/costcenter/update" method="post">
-    <input type="text" name="name">
-    <input type="submit">
-</form>
-
-<p>Delete User with id:</p>
-<form action="/costcenter/delete" method="post">
-    <input type="text" name="id">
-    <input type="submit">
-</form>
-
-
-<br>
-<br>
-
-
-<h2>User</h2>
-<p>Create User</p>
-<form action="/user/create" method="post">
-    <input type="text" name="name">
-    <input type="submit">
-</form>
-
-<p>Delete User with id:</p>
-<form action="/user/delete" method="post">
-    <input type="text" name="id">
-    <input type="submit">
-</form>
-
+echo view('partials/navbar.php');
+echo view('partials/sidebar.php');
