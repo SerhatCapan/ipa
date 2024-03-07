@@ -40,16 +40,4 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @throws ReflectionException
-     */
-    public function create_user(array $data) {
-        $this->insert($data);
-    }
-
-    public function delete_user($id) {
-        $this->delete($id);
-    }
 }

@@ -15,40 +15,35 @@ class User extends BaseController
     }
 
     /**
-     * Creates User
-     *
      * @return void
      * @throws ReflectionException
      */
     public function create()
     {
-        $data = [
-            'name' => $this->request->getPost('name')
-        ];
+        $user = $this->user_model->where('name', '')->first();
 
-        $this->user_model->create_user($data);
+        if ($user === null) {
+            $this->user_model->insert([
+                'name' => $this->request->getPost('name')
+            ]);
+        }
+
     }
 
     /**
-     * Deletes User
-     *
      * @return void
      */
     public function delete()
     {
         $id = $this->request->getPost('id');
-        $this->user_model->delete_user($id);
+        $this->user_model->delete($id);
     }
 
     /**
-     * Switches user
-     *
      * @return void
      */
     public function switch() {
-
         // TODO: program the switch
-
         // the new user that should be switched to
         $to = $this->request->getPost('to');
         redirect('/');

@@ -40,26 +40,4 @@ class CostCenterModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-
-    /**
-     * @throws ReflectionException
-     */
-    public function create_costcenter(array $data) {
-        $this->insert($data);
-    }
-
-    public function read_costcenter($data) {
-
-
-        $result = $this->select('*')->get()->getResult;
-
-
-
-        return $result;
-    }
-
-    public function delete_costcenter($id) {
-        $this->delete($id);
-    }
 }
