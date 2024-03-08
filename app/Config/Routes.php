@@ -19,6 +19,15 @@ $routes->post('/costcenter/update', 'Costcenter::update');
 $routes->get('/costcenter/read', 'Costcenter::read');
 $routes->post('/costcenter/delete', 'Costcenter::delete');
 
+/**
+ * Costcenter Group
+ */
+$routes->get('/costcenter-group', 'CostcenterGroup::index');
+$routes->get('/costcenter-group/(:any)', 'CostcenterGroup::index');
+$routes->post('/costcenter-group/create', 'CostcenterGroup::create');
+$routes->post('/costcenter-group/update', 'CostcenterGroup::update');
+$routes->get('/costcenter-group/read', 'CostcenterGroup::read');
+$routes->post('/costcenter-group/delete', 'CostcenterGroup::delete');
 
 /**
  * User

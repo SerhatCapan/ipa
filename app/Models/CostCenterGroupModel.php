@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class CostCenterGroupModel extends Model
 {
-    protected $table            = 'costcentergroup';
+    protected $table            = 'costcenter_group';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['name'];
 
     protected bool $allowEmptyInserts = false;
 
