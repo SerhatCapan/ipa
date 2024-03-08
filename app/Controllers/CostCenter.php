@@ -16,19 +16,30 @@ class CostCenter extends BaseController
         $this->costcenter = new CostCenterModel();
     }
 
+    /**
+     * TODO:
+     * - Arbeitsstunden holen
+     * - Kostenstellen-Gruppe holen
+     *
+     * @return string
+     */
     public function index() {
         $table = get_table_template();
+        $table->setHeading('Name', 'Kostenstellen-Gruppe', 'Arbeitsstunden', ' ');
 
-        $table->setHeading('Name', 'Kostenstellen-Gruppe', 'Arbeitsstunden', '');
-
-        
-
+        foreach ($this->costcenter->findAll() as $costcenter) {
+            $table->addRow(
+                '<a uk-tooltip="Kostenstelle bearbeiten" href="/costcenter/' . $costcenter['id'] . '">' . $costcenter['name'] . '</a>',
+                'Gruppe',
+                20,
+                '<a id="icon_edit_costcenter" uk-tooltip="Kostenstelle bearbeiten" href="costcenter/edit/' .  $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
+                <a id="icon_trash_costcenter" uk-tooltip="Kostenstelle löschen" href="costcenter/trash/' . $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
+            );
+        }
 
         $data = [
-            "costcenters" => $this->costcenter->findAll(),
-            "table" =>
+            "table" => $table->generate()
         ];
-
 
         return view('partials/header') .
             view('costcenter/index', $data) .
