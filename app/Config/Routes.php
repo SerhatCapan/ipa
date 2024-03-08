@@ -10,6 +10,11 @@ $routes->get('/dashboard', 'Dashboard::index');
 $routes->get('/home', 'Dashboard::index');
 
 /**
+ * Workhour
+ */
+$routes->post('/workhour/update', 'Workhour::update');
+
+/**
  * Costcenter
  */
 $routes->get('/costcenter', 'Costcenter::index');

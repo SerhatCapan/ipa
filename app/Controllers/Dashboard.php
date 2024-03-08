@@ -23,21 +23,8 @@ class Dashboard extends BaseController
      */
     public function index(): string
     {
-
-       $costcenters = $this->costcentermodel
-            ->select('*')
-            ->join('ipa_workhour', 'ipa_costcenter.id = ipa_workhour.id_costcenter', 'left')
-            ->get()->getResultArray();
-
-       $table = get_table_template();
-
-       foreach ($costcenters as $costcenter) {
-           $table->addRow($costcenter['name'], $costcenter['hours']);
-           $table->addRow($costcenter['name'], $costcenter['hours']);
-       }
-
        $data = [
-           'table' => $table->generate()
+           'workdays' => $this->get_workdays()
        ];
 
         return view('partials/header') .
@@ -45,7 +32,34 @@ class Dashboard extends BaseController
             view('partials/footer');
     }
 
-    public function get_card_date() {
+    public function get_rendered_card() {
+        $workdays = $this->get_workdays();
 
+        $html = '';
+
+        foreach ($workdays as $date => $workday) {
+            $html .= render_dashboard_card([]);
+        }
+    }
+
+    private function get_workdays() {
+        $workhours = $this->workhourmodel
+            ->select('ipa_workhour.id, ipa_workhour.hours, ipa_workhour.date, ipa_costcenter.description, ipa_costcenter.id_costcenter_group, ipa_costcenter.name')
+            ->join('ipa_costcenter', 'ipa_costcenter.id = ipa_workhour.id_costcenter', 'left')
+            ->orderBy('ipa_workhour.date', 'DESC')
+            ->get()->getResultArray();
+
+        $workdays = [];
+
+        foreach ($workhours as $workhour) {
+            $workdays[$workhour['date']]['workhours'][] = $workhour;
+            $workdays[$workhour['date']]['workhours_total'] =
+                $this->workhourmodel
+                    ->select('SUM(ipa_workhour.hours) as workhours_total')
+                    ->where('date', $workhour['date'])
+                    ->get()->getResultArray()[0]['workhours_total'];
+        }
+
+        return $workdays;
     }
 }
