@@ -16,6 +16,7 @@
     <script src="<?= base_url() ?>/js/uikit-icons.min.js"></script>
 
     <script type="text/javascript" src="<?=base_url()?>js/costcenter.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>js/costcenter-group.js"></script>
 </head>
 <body>
 <?php
