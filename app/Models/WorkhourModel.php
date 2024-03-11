@@ -12,7 +12,7 @@ class WorkhourModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_user', 'id_cost_center', 'date', 'hours', 'description'];
+    protected $allowedFields    = ['id_user', 'id_costcenter', 'date', 'hours', 'description'];
 
     protected bool $allowEmptyInserts = false;
 

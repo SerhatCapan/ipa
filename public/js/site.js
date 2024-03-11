@@ -60,7 +60,11 @@ $(document).ready(function() {
                     },
 
                     success: function (response) {
-                        console.log(response)
+                        UIkit.notification({
+                            message: response.message,
+                            status: 'success',
+                            pos: 'top-right'
+                        });
                     },
                 });
             }

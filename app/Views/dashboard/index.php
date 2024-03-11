@@ -14,7 +14,12 @@
     <div id="db-container-workdays" class="uk-child-width-1-4@l uk-child-width-1-3@m uk-child-width-1-2@s" uk-grid>
         <?php foreach ($workdays as $date => $workday) { ?>
             <div>
-                <?php echo get_html_dashboard_card(['workday' => $workday, 'date' => $date]) ?>
+                <?php
+                echo get_html_dashboard_card([
+                    'workday' => $workday,
+                    'date' => $date,
+                    'costcenters' => $costcenters
+                ]) ?>
             </div>
         <?php } ?>
     </div>

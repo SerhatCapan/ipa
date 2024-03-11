@@ -32,7 +32,8 @@ class Dashboard extends BaseController
        $workdays = $this->workhourmodel->get_as_workdays($data);
         
        $data = [
-           'workdays' => $workdays
+           'workdays' => $workdays,
+           'costcenters' => $this->costcentermodel->findAll()
        ];
 
         return view('partials/header') .

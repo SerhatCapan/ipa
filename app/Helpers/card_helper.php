@@ -21,22 +21,23 @@ function get_html_dashboard_card($data) {
             </div>
         </div>
         <div class="uk-card-body">
-            <div uk-grid class="uk-grid-collapse" id="db-container-workday-rows-<?= $data['date'] ?>">
+            <div uk-grid class="uk-grid-small" id="db-container-workday-rows-<?= $data['date'] ?>">
                 <?php
                 foreach ($data['workday']['workhours'] as $workhour) {
                     echo get_html_dashboard_card_row([
                         'workhour' => $workhour,
-                        'date' => $data['date']
+                        'costcenters' => $data['costcenters'],
+                        'date' => $data['date'],
                     ]);
                 } ?>
             </div>
         </div>
         <div class="uk-card-footer">
-            <div uk-grid class="uk-grid-collapse uk-child-width-1-3">
-                <div class="uk-text-bold">
+            <div uk-grid class="uk-grid-small">
+                <div class="uk-text-bold  uk-width-3-5">
                     Total
                 </div>
-                <div class="uk-text-bold">
+                <div class="uk-text-bold uk-width-1-5">
                    <span id="db-workhours-total-<?= $data['date'] ?>"><?= $data['workday']['workhours_total'] ?></span>h
                 </div>
             </div>
@@ -49,13 +50,17 @@ function get_html_dashboard_card($data) {
 function get_html_dashboard_card_row($data) {
     ob_start();
     ?>
-    <div class="uk-width-1-3">
-        <span contenteditable data-workhour-id="<?= $data['workhour']['id'] ?>"><?= esc($data['workhour']['name'] ?? '') ?></span>
+    <div class="uk-width-3-5">
+        <select data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>"  class="db-select-workhour-costcenter uk-select" aria-label="Select">
+            <?php foreach ($data['costcenters'] as $costcenter) { ?>
+                <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= esc($costcenter['name']) ?></option>
+            <?php } ?>
+        </select>
     </div>
-    <div class="uk-width-1-3">
+    <div class="uk-width-1-5">
         <span data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $data['workhour']['hours'] ?></span>h
     </div>
-    <div class="uk-width-1-3 uk-invisible-hover">
+    <div class="uk-width-1-5 uk-invisible-hover">
         <a data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Arbeitsstunden löschen" class="db-icon-delete-workhour uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
         <a data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Kostenstelle hinzufügen" class="db-icon-add-costcenter uk-icon-link uk-margin-small-right" uk-icon="plus"></a>
     </div>

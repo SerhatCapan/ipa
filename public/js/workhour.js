@@ -5,8 +5,6 @@ $(document).ready(function () {
     let container_workdays = $('#db-container-workdays');
 
     button_create_workday.on('click', function () {
-        console.log('hallo')
-
         $.ajax({
             url: "/workday/create",
             method: "post",
@@ -17,20 +15,28 @@ $(document).ready(function () {
 
             success: function (response) {
                 console.log(response)
-                container_workdays.prepend(response.html)
 
-                UIkit.notification({
-                    message: response.message,
-                    status: 'success',
-                    pos: 'top-right'
-                });
+                switch (response.success) {
+                    case true:
+                        UIkit.notification({
+                            message: response.message,
+                            status: 'success',
+                            pos: 'top-right'
+                        });
+                        break;
+                    case false:
+                        UIkit.notification({
+                            message: response.message,
+                            status: 'danger',
+                            pos: 'top-right'
+                        });
+                        break;
+                }
+
+                container_workdays.prepend(response.html)
             },
         });
     })
-
-    function create_workday(date) {
-
-    }
 
     $(document).on('click', '.db-icon-delete-workhour', function(event) {
         event.preventDefault()
@@ -58,6 +64,31 @@ $(document).ready(function () {
             },
         });
     })
+
+    $(document).on('change', '.db-select-workhour-costcenter', function(event) {
+        let id_costcenter = $(this).val();
+        let id = $(this).data('workhour-id')
+
+        console.log(id + ' ' + id_costcenter)
+
+        $.ajax({
+            url: "/workhour/update",
+            method: "post",
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            data: {
+                id: id,
+                id_costcenter: id_costcenter
+            },
+
+            success: function (response) {
+                UIkit.notification({
+                    message: response.message,
+                    status: 'success',
+                    pos: 'top-right'
+                });
+            },
+        });
+    });
     
     
     function get_workday_total_hours(workhour_date) {

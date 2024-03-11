@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\CostCenterModel;
 use App\Models\WorkhourModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use ReflectionException;
@@ -10,11 +11,13 @@ use ReflectionException;
 class Workhour extends BaseController
 {
     private WorkhourModel $workhourmodel;
+    private CostCenterModel $costcentermodel;
     private $session;
 
     public function __construct()
     {
         $this->workhourmodel = new WorkhourModel();
+        $this->costcentermodel = new CostCenterModel();
         $this->session = session();
     }
 
@@ -31,10 +34,12 @@ class Workhour extends BaseController
         ]);
 
         $workhour = $this->workhourmodel->find($this->workhourmodel->getInsertID());
+        $costcenters = $this->costcentermodel->findAll();
+
         $return = [
             'success' => true,
             'message' => 'Neue Arbeitsstunde wurde erstellt',
-            'html' => get_html_dashboard_card_row(['workhour' => $workhour, 'date' => $date])
+            'html' => get_html_dashboard_card_row(['workhour' => $workhour, 'date' => $date, 'costcenters' => $costcenters])
         ];
 
         return $this->response->setJSON($return);
@@ -51,12 +56,25 @@ class Workhour extends BaseController
     public function update()
     {
         $id = $this->request->getPost('id');
+        $id_costcenter = $this->request->getPost('id_costcenter');
         $hours = $this->request->getPost('hours');
 
-        $this->workhourmodel
-            ->set('hours', $hours)
-            ->where('id', $id)
-            ->update();
+        if (!empty($id_costcenter)) {
+            $this->workhourmodel->set('id_costcenter', $id_costcenter);
+        };
+
+        if (!empty($hours)) {
+            $this->workhourmodel->set('hours', $hours);
+        };
+
+        $this->workhourmodel->update($id);
+
+        $return = [
+            'success' => true,
+            'message' => 'Arbeitsstunde wurde aktualisiert'
+        ];
+
+        return $this->response->setJSON($return);
     }
 
     public function delete()
