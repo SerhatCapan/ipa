@@ -24,7 +24,7 @@ $(document).ready(function() {
             }
 
             // Update the total hours element
-            $('#workhours_total_' + workhour_date).text(total_hours);
+            $('#db-workhours-total-' + workhour_date).text(total_hours);
 
             if (!isNaN($(this).text())) {
                 $.ajax({
@@ -45,4 +45,6 @@ $(document).ready(function() {
             $(this).addClass('uk-text-danger');
         }
     });
+
+
 });

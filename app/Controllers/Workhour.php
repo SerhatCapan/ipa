@@ -43,5 +43,12 @@ class Workhour extends BaseController
     {
         $id = $this->request->getPost('id');
         $this->workhourmodel->delete($id);
+
+        $return = [
+            'success' => true,
+            'message' => 'Arbeitsstunde wurde gelöscht',
+        ];
+
+        return;
     }
 }

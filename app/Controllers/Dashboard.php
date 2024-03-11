@@ -44,7 +44,7 @@ class Dashboard extends BaseController
 
     private function get_workdays() {
         $workhours = $this->workhourmodel
-            ->select('ipa_workhour.id, ipa_workhour.hours, ipa_workhour.date, ipa_costcenter.description, ipa_costcenter.id_costcenter_group, ipa_costcenter.name')
+            ->select('ipa_workhour.id, ipa_workhour.hours, ipa_workhour.date, ipa_costcenter.description, ipa_costcenter.id AS id_costcenter , ipa_costcenter.name')
             ->join('ipa_costcenter', 'ipa_costcenter.id = ipa_workhour.id_costcenter', 'left')
             ->orderBy('ipa_workhour.date', 'DESC')
             ->get()->getResultArray();
