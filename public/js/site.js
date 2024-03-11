@@ -1,5 +1,28 @@
 $(document).ready(function() {
-    $('.db-workday-hour').on('input', function() {
+    $(document).on('click', '.db-icon-add-costcenter', function(event) {
+        event.preventDefault();
+
+        let id = $(this).data('workhour-id');
+        let date = $(this).data('workhour-date');
+        let container_workday_rows = $('#db-container-workday-rows-' + date)
+
+        $.ajax({
+            url: "/workhour/create",
+            method: "post",
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            data: {
+                id: id,
+                date: date
+            },
+
+            success: function (response) {
+                container_workday_rows.append(response.html);
+            },
+        });
+    })
+
+
+    $(document).on('input', '.db-workday-hour', function() {
         let max_number = 24;
         let current_value = $(this).text();
         let total_hours = 0;

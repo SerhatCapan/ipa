@@ -11,11 +11,13 @@ class Dashboard extends BaseController
 {
     private WorkhourModel $workhourmodel;
     private CostCenterModel $costcentermodel;
+    private $session;
 
     public function __construct()
     {
         $this->workhourmodel = new WorkhourModel();
         $this->costcentermodel = new CostCenterModel();
+        $this->session = session();
     }
 
     /**
@@ -24,42 +26,17 @@ class Dashboard extends BaseController
     public function index(): string
     {
        $data = [
-           'workdays' => $this->get_workdays()
+           'id_user' => $this->session->get('current_user')['id']
+       ];
+
+       $workdays = $this->workhourmodel->get_as_workdays($data);
+        
+       $data = [
+           'workdays' => $workdays
        ];
 
         return view('partials/header') .
             view('/dashboard/index', $data) .
             view('partials/footer');
-    }
-
-    public function get_rendered_card() {
-        $workdays = $this->get_workdays();
-
-        $html = '';
-
-        foreach ($workdays as $date => $workday) {
-            $html .= render_dashboard_card([]);
-        }
-    }
-
-    private function get_workdays() {
-        $workhours = $this->workhourmodel
-            ->select('ipa_workhour.id, ipa_workhour.hours, ipa_workhour.date, ipa_costcenter.description, ipa_costcenter.id AS id_costcenter , ipa_costcenter.name')
-            ->join('ipa_costcenter', 'ipa_costcenter.id = ipa_workhour.id_costcenter', 'left')
-            ->orderBy('ipa_workhour.date', 'DESC')
-            ->get()->getResultArray();
-
-        $workdays = [];
-
-        foreach ($workhours as $workhour) {
-            $workdays[$workhour['date']]['workhours'][] = $workhour;
-            $workdays[$workhour['date']]['workhours_total'] =
-                $this->workhourmodel
-                    ->select('SUM(ipa_workhour.hours) as workhours_total')
-                    ->where('date', $workhour['date'])
-                    ->get()->getResultArray()[0]['workhours_total'];
-        }
-
-        return $workdays;
     }
 }

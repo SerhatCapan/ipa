@@ -26,7 +26,6 @@ $(document).ready(function () {
         });
     })
 
-
     $('#db-icon-trash-costcenter').on('click', function (event) {
         event.preventDefault();
 

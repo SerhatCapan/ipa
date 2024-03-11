@@ -5,10 +5,12 @@ use CodeIgniter\I18n\Time;
 /**
  * @throws Exception
  */
-function render_dashboard_card($data) {
+function get_html_dashboard_card($data) {
     $date = Time::parse($data['date'], 'Europe/Zurich');
+
+    ob_start();
     ?>
-    <div class="uk-card uk-card-default" data-workday-id>
+    <div class="uk-card uk-card-default uk-visible-toggle" data-workday-id>
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid="masonry: true">
                 <div class="uk-width-expand">
@@ -19,32 +21,14 @@ function render_dashboard_card($data) {
             </div>
         </div>
         <div class="uk-card-body">
-            <div uk-grid class="uk-grid-collapse uk-child-width-1-3">
+            <div uk-grid class="uk-grid-collapse" id="db-container-workday-rows-<?= $data['date'] ?>">
                 <?php
-
-                if (isset($data['workday']['workhours'])) {
-                    foreach ($data['workday']['workhours'] as $workhour) { ?>
-                        <div>
-                            <span data-workhour-id="<?= $workhour['id'] ?>"><?= esc($workhour['name']) ?></span>
-                        </div>
-                        <div>
-                            <span data-workhour-id="<?= $workhour['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $workhour['hours'] ?></span>h
-                        </div>
-                        <div>
-                            <a data-workhour-id="<?= $workhour['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Arbeitsstunden löschen" class="db-icon-delete-workhour uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
-                        </div>
-                    <?php }
-                } else { ?>
-                    <div>
-                        <span></span>
-                    </div>
-                    <div>
-                        <span data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable></span>h
-                    </div>
-                    <div>
-                        <a data-workhour-id="<?= $workhour['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Arbeitsstunden löschen" class="db-icon-delete-workhour uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
-                    </div>
-                <?php } ?>
+                foreach ($data['workday']['workhours'] as $workhour) {
+                    echo get_html_dashboard_card_row([
+                        'workhour' => $workhour,
+                        'date' => $data['date']
+                    ]);
+                } ?>
             </div>
         </div>
         <div class="uk-card-footer">
@@ -58,4 +42,23 @@ function render_dashboard_card($data) {
             </div>
         </div>
     </div>
-<?php }
+    <?php
+    return ob_get_clean();
+}
+
+function get_html_dashboard_card_row($data) {
+    ob_start();
+    ?>
+    <div class="uk-width-1-3">
+        <span contenteditable data-workhour-id="<?= $data['workhour']['id'] ?>"><?= esc($data['workhour']['name'] ?? '') ?></span>
+    </div>
+    <div class="uk-width-1-3">
+        <span data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $data['workhour']['hours'] ?></span>h
+    </div>
+    <div class="uk-width-1-3 uk-invisible-hover">
+        <a data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Arbeitsstunden löschen" class="db-icon-delete-workhour uk-icon-link uk-margin-small-right" uk-icon="trash"></a>
+        <a data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" uk-tooltip="Kostenstelle hinzufügen" class="db-icon-add-costcenter uk-icon-link uk-margin-small-right" uk-icon="plus"></a>
+    </div>
+    <?php
+    return ob_get_clean();
+}

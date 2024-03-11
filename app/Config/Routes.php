@@ -10,8 +10,14 @@ $routes->get('/dashboard', 'Dashboard::index');
 $routes->get('/home', 'Dashboard::index');
 
 /**
+ * Workday
+ */
+$routes->post('/workday/create', 'Workday::create');
+
+/**
  * Workhour
  */
+$routes->post('/workhour/create', 'Workhour::create');
 $routes->post('/workhour/update', 'Workhour::update');
 $routes->post('/workhour/delete', 'Workhour::delete');
 

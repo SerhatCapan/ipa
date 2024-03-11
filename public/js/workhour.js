@@ -1,11 +1,14 @@
 $(document).ready(function () {
+    // Passing options (with default options)
     let input_create_workday_date = $('#db-input-create-workday-date')
     let button_create_workday = $('#db-button-create-workday')
     let container_workdays = $('#db-container-workdays');
 
     button_create_workday.on('click', function () {
+        console.log('hallo')
+
         $.ajax({
-            url: "/workhour/create",
+            url: "/workday/create",
             method: "post",
             headers: {'X-Requested-With': 'XMLHttpRequest'},
             data: {
@@ -13,6 +16,7 @@ $(document).ready(function () {
             },
 
             success: function (response) {
+                console.log(response)
                 container_workdays.prepend(response.html)
 
                 UIkit.notification({
@@ -28,7 +32,7 @@ $(document).ready(function () {
 
     }
 
-    $('.db-icon-delete-workhour').on('click', function (event) {
+    $(document).on('click', '.db-icon-delete-workhour', function(event) {
         event.preventDefault()
 
         let workhour_id = $(this).data('workhour-id');
