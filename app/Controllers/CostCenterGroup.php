@@ -73,8 +73,8 @@ class CostCenterGroup extends BaseController
             $table->addRow(
                 '<a uk-tooltip="Kostenstelle-Gruppe bearbeiten" href="/costcenter/' . $costcenter['id'] . '">' . $costcenter['name'] . '</a>',
                 20,
-                '<a id="icon_edit_costcenter_group" uk-tooltip="Kostenstellen-Gruppe bearbeiten" href="costcenter-group/edit/' .  $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
-                <a id="icon_trash_costcenter_group" uk-tooltip="Kostenstellen-Gruppe löschen" href="costcenter-group/trash/' . $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
+                '<a id="db-icon-edit-costcenter-group" uk-tooltip="Kostenstellen-Gruppe bearbeiten" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
+                <a id="db-icon-trash-costcenter-group" uk-tooltip="Kostenstellen-Gruppe löschen" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
             );
         }
 

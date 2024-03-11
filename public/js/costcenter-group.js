@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    let input_create_costcenter_group = $('#input_create_costcenter_group');
-    let container_messages_costcenter_group = $('#container_messages_costcenter_group');
-    let button_create_costcenter_group = $('#button_create_costcenter_group');
-    let container_table_costcenter_group = $('#container_table_costcenter_group')
+    let input_create_costcenter_group = $('#db-input-create-costcenter-group');
+    let container_messages_costcenter_group = $('#db-container-messages-costcenter-group');
+    let button_create_costcenter_group = $('#db-button-create-costcenter-group');
+    let container_table_costcenter_group = $('#db-container-table-costcenter-group')
 
     /**
      * Fires after clicking on the plus

@@ -39,8 +39,9 @@ class Workhour extends BaseController
             ->update();
     }
 
-    public function delete($id)
+    public function delete()
     {
-
+        $id = $this->request->getPost('id');
+        $this->workhourmodel->delete($id);
     }
 }

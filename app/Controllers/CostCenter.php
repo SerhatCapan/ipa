@@ -33,7 +33,7 @@ class CostCenter extends BaseController
                 'Gruppe',
                 20,
                 '<a id="icon_edit_costcenter" uk-tooltip="Kostenstelle bearbeiten" href="costcenter/edit/' .  $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
-                <a id="icon_trash_costcenter" uk-tooltip="Kostenstelle löschen" href="costcenter/trash/' . $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
+                <a id="db-icon-trash-costcenter" uk-tooltip="Kostenstelle löschen" href="costcenter/trash/' . $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
             );
         }
 

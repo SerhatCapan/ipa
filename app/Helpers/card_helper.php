@@ -25,7 +25,10 @@ function render_dashboard_card($data) {
                         <?= $workhour['name'] ?>
                     </div>
                     <div>
-                        <span data-workhour-id="<?= $workhour['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $workhour['hours'] ?></span>h
+                        <span data-workhour-id="<?= $workhour['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $workhour['hours'] ?></span>
+                    </div>
+                    <div>
+
                     </div>
                 <?php } ?>
             </div>

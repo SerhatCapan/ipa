@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    let list_costcenters = $('#list_costcenters')
-    let input_create_costcenter = $('#input_create_costcenter');
-    let container_messages_costcenter = $('#container_messages_costcenter');
+    let list_costcenters = $('#db-list-costcenters')
+    let input_create_costcenter = $('#db-input-create-costcenter');
+    let container_messages_costcenter = $('#db-container-messages-costcenter');
 
-    $('#button_create_costcenter').on("click", function (event) {
+    $('#db-button-create-costcenter').on("click", function (event) {
         event.preventDefault();
 
         $.ajax({
@@ -27,7 +27,7 @@ $(document).ready(function () {
     })
 
 
-    $('#icon_trash_costcenter').on('click', function (event) {
+    $('#db-icon-trash-costcenter').on('click', function (event) {
         event.preventDefault();
 
         let id = $(this).closest('tr').data('costcenter-id');
