@@ -13,6 +13,7 @@ $routes->get('/home', 'Dashboard::index');
  * Workhour
  */
 $routes->post('/workhour/update', 'Workhour::update');
+$routes->post('/workhour/delete', 'Workhour::delete');
 
 /**
  * Costcenter
@@ -37,7 +38,9 @@ $routes->post('/costcenter-group/delete', 'CostcenterGroup::delete');
 /**
  * User
  */
+$routes->get('/user', 'User::index');
 $routes->post('/user/create', 'User::create');
 $routes->post('/user/delete', 'User::delete');
+$routes->post('/user/switch', 'User::switch');
 
 
