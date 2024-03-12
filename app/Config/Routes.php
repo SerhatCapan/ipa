@@ -50,6 +50,13 @@ $routes->post('/user/update', 'User::update');
 $routes->post('/user/delete', 'User::delete');
 $routes->post('/user/switch', 'User::switch');
 
+$routes->get('/user/vacation/', 'Vacation::index');
+$routes->get('/user/vacation/(:any)', 'Vacation::index');
+$routes->post('/user/vacation/create', 'Vacation::create');
+$routes->get('/user/vacation/read', 'Vacation::read');
+$routes->post('/user/vacation/update', 'Vacation::update');
+$routes->post('/user/vacation/delete', 'Vacation::delete');
+
 /**
  * Settings
  */

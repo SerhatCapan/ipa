@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class VacationModel extends Model
+class HolidayModel extends Model
 {
-    protected $table            = 'vacation';
+    protected $table            = 'holidays';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_user', 'date', 'hours'];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
 

@@ -13,7 +13,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'min_workhours_per_day'];
+    protected $allowedFields    = ['name', 'date_from_overtime'];
 
     protected bool $allowEmptyInserts = false;
 

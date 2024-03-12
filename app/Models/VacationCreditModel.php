@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class VacationCreditModel extends Model
 {
-    protected $table            = 'vacationcredits';
+    protected $table            = 'vacation_credit';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

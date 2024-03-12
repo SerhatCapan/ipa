@@ -45,6 +45,13 @@
             </div>
         </div>
 
+        <div class="uk-margin">
+            <label class="uk-form-label" for="db-input-update-user-overtime">Überzeit Startdatum * <span uk-icon="info" uk-tooltip="Ab Wann die Überzeiten gezählt werden sollen."></span></label>
+            <div class="uk-form-controls">
+                <input required class="uk-input" name="date-from-overtime" id="db-input-update-user-overtime" type="date" value="<?= esc($current_user['date_from_overtime']) ?>">
+            </div>
+        </div>
+
         <input type="hidden" value="<?= $current_user['id'] ?>" name="id">
 
         <div class="uk-margin">

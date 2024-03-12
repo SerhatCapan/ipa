@@ -93,7 +93,7 @@ class User extends BaseController
 
         $this->usermodel
             ->set('name', $this->request->getPost('name'))
-            ->set('min_workhours_per_day', $this->request->getPost('min-workhours-per-day'))
+            ->set('date_from_overtime', $this->request->getPost('date-from-overtime'))
             ->update($id);
 
         $flashdata = [
