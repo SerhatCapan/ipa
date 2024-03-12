@@ -12206,4 +12206,25 @@ iframe.uk-cover {
   margin-left: 320px;
   width: 80%;
 }
+.db-calendar {
+  text-align: center;
+}
+.db-calendar th,
+.db-calendar tr {
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+}
+.db-calendar th {
+  background-color: gold;
+}
+.db-calendar tbody tr {
+  cursor: pointer;
+}
+.db-calendar td {
+  background: #abfde8;
+}
+.db-calendar .db-calendar-week-selected td {
+  background-color: #06D6A0;
+}
 /*# sourceMappingURL=style.css.map */

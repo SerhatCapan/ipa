@@ -57,19 +57,24 @@ class WorkhourModel extends Model
                 $this->where('ipa_workhour.id', $data['id']);
             };
 
+            if (isset($data['date_from']) && isset($data['date_to'])) {
+                $where_date = "ipa_workhour.date BETWEEN '" . $data['date_from'] . "' AND '" . $data['date_to'] . "'";
+                $this->where($where_date);
+            };
 
-        $workhours = $this->orderBy('ipa_workhour.date', 'DESC')
-            ->get()->getResultArray();
+            $this->orderBy('ipa_workhour.date', 'DESC');
+            $workhours = $this->get()->getResultArray();
 
         $workdays = [];
 
         foreach ($workhours as $workhour) {
             $workdays[$workhour['date']]['workhours'][] = $workhour;
-            $workdays[$workhour['date']]['workhours_total'] =
-                $this
-                    ->select('SUM(ipa_workhour.hours) as workhours_total')
-                    ->where('date', $workhour['date'])
-                    ->get()->getResultArray()[0]['workhours_total'];
+
+            $this
+                ->select('SUM(ipa_workhour.hours) as workhours_total')
+                ->where('date', $workhour['date']);
+
+            $workdays[$workhour['date']]['workhours_total'] = $this->get()->getResultArray()[0]['workhours_total'];
         }
 
         return $workdays;

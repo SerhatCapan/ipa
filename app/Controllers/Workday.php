@@ -68,11 +68,9 @@ class Workday extends BaseController
         return $this->response->setJSON($return);
     }
 
-    public function read($id)
-    {
+    public function read() {
 
     }
-
 
     public function delete()
     {

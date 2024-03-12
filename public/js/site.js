@@ -74,4 +74,12 @@ $(document).ready(function() {
     });
 
 
+    $(document).on('click', '.db-calendar-week', function() {
+        let date_from = $(this).data('date-from');
+        let date_to = $(this).data('date-to');
+        let current_url = window.location.href;
+        let base_url = current_url.split('/').slice(0, 3).join('/');
+
+        window.location.href = base_url + '/dashboard?get_workdays=1&date_from=' + date_from + '&date_to=' + date_to;
+    });
 });

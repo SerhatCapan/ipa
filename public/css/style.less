@@ -29,3 +29,31 @@
   margin-left: 320px;
   width: 80%;
 }
+
+.db-calendar {
+  text-align: center;
+
+  th, tr {
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1 / 1 ;
+  }
+
+  th {
+    background-color: gold;
+  };
+
+  tbody tr {
+    cursor: pointer;
+  }
+
+  td {
+    background: lighten(@color-green, 40%);
+  }
+
+  .db-calendar-week-selected {
+    td {
+      background-color: @color-green;
+    }
+  }
+}
