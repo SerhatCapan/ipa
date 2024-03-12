@@ -46,6 +46,7 @@ $routes->post('/costcenter-group/delete', 'CostcenterGroup::delete');
  */
 $routes->get('/user', 'User::index');
 $routes->post('/user/create', 'User::create');
+$routes->post('/user/update', 'User::update');
 $routes->post('/user/delete', 'User::delete');
 $routes->post('/user/switch', 'User::switch');
 

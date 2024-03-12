@@ -63,6 +63,51 @@ class User extends BaseController
     }
 
     /**
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     * @throws ReflectionException
+     */
+    public function update()
+    {
+        $name = $this->request->getPost('name');
+        $id = $this->request->getPost('id');
+        $session = session();
+
+        $user_exists = $this->usermodel
+            ->select('name')
+            ->where('id !=', $id)
+            ->where('name', esc($name))
+            ->get()->getResultArray();
+
+        if (!empty($user_exists)) {
+
+            $flashdata = [
+                'return' => [
+                    'success' => false,
+                    'message' => 'Benutzer mit dem Namen existiert schon',
+                ]
+            ];
+
+            $session->setFlashdata($flashdata);
+            return redirect()->to('user');
+        }
+
+        $this->usermodel
+            ->set('name', $this->request->getPost('name'))
+            ->set('min_workhours_per_day', $this->request->getPost('min-workhours-per-day'))
+            ->update($id);
+
+        $flashdata = [
+            'return' => [
+                'success' => true,
+                'message' => 'Benutzer wurde aktualisiert',
+            ]
+        ];
+
+        $session->setFlashdata($flashdata);
+        return redirect()->to('user');
+    }
+
+    /**
      * @return void
      */
     public function delete()

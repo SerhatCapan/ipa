@@ -1,6 +1,27 @@
 <p class="uk-text-small uk-margin-remove">Benutzer</p>
 <h1 class="uk-margin-remove-top"><?= $title ?></h1>
 <div class="uk-margin-medium-top">
+    <?php
+    $session = session();
+    $return = $session->getFlashdata('return');
+
+    if ($return !== null) {
+        switch ($return['success']) {
+            case true:
+                $alert = 'success';
+                break;
+            case false:
+                $alert = 'warning';
+                break;
+        }
+        ?>
+
+        <div class="uk-alert-<?= $alert ?>" uk-alert>
+            <a href class="uk-alert-close" uk-close></a>
+            <p><?= $return['message'] ?></p>
+        </div>
+    <?php } ?>
+
     <form action="/user/switch" method="post">
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
             <div>
@@ -13,6 +34,27 @@
             <div>
                 <input type="submit" id="db-button-switch-user" class="uk-button uk-button-primary" value="<?= $switch_user_button_title ?>">
             </div>
+        </div>
+    </form>
+
+    <form class="uk-margin-top" action="/user/update" method="post">
+        <div class="uk-margin">
+            <label class="uk-form-label" for="db-input-update-user-min-workhours-per-day">Minimum Arbeitsstunden pro Tag *</label>
+            <div class="uk-form-controls">
+                <input required class="uk-input" name="min-workhours-per-day" id="db-input-update-user-min-workhours-per-day" value="<?= esc($current_user['min_workhours_per_day']) ?>" type="text">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="db-input-update-user-name">Name *</label>
+            <div class="uk-form-controls">
+                <input required class="uk-input" name="name" id="db-input-update-user-name" type="text" value="<?= esc($current_user['name']) ?>">
+            </div>
+        </div>
+
+        <input type="hidden" value="<?= $current_user['id'] ?>" name="id">
+
+        <div class="uk-margin">
+            <input type="submit" class="uk-button-primary uk-button" value="Einstellungen speichern">
         </div>
     </form>
 </div>
