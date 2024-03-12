@@ -18,10 +18,7 @@
     <script type="text/javascript" src="<?=base_url()?>js/costcenter.js"></script>
     <script type="text/javascript" src="<?=base_url()?>js/costcenter-group.js"></script>
     <script type="text/javascript" src="<?=base_url()?>js/workhour.js"></script>
-    <script type="text/javascript" src="<?=base_url()?>js/site.js"></script>
-
-
-
+    <script type="text/javascript" src="<?=base_url()?>js/dashboard.js"></script>
 </head>
 <body>
 <?php

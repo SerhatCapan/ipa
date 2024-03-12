@@ -39,4 +39,19 @@ class OptionModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Returns the amount of hours to work per day.
+     *
+     * @return mixed
+     */
+    public function get_workhours_per_day() {
+        $workhours_row = $this
+            ->select('*')
+            ->where('name', 'workhours_per_day')
+            ->get()->getResultArray();
+
+
+        return $workhours_row[0]['value'];
+    }
 }

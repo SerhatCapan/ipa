@@ -30,7 +30,7 @@ $sidebar = [
             ],
             [
                 "label" => 'Ferien',
-                "page"  => "/user/vacation_credit",
+                "page"  => "/user/vacation",
             ],
             [
                 "label" => 'Absenzen',

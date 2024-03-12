@@ -117,15 +117,13 @@ class User extends BaseController
     }
 
     /**
+     * Switches the user and redirects to the user page
+     *
      * @return void
      */
     public function switch() {
-        // TODO: program the switch
-        // the new user that should be switched to
         $id = $this->request->getPost('user');
-
         setcookie('current_user_id', $id, strtotime('+365 days'), '/');
-
         // redirect didn't work with redirect() form codeigniter
         header("Location: " . base_url() . 'user');
     }

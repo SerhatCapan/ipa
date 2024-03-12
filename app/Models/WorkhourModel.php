@@ -79,4 +79,37 @@ class WorkhourModel extends Model
 
         return $workdays;
     }
+
+    /**
+     * Returns back the calculated sum of the time period
+     *
+     * @param $data array should look like this. If dates arent set, the whole time gets caluclated:
+     *
+     * [
+     *  'date_from' => '2024-01-01",
+     *  'date_to' => '2024-12-31",
+     *  'id_user' => 1
+     * ]
+     *
+     * @return int
+     */
+    public function get_total_workhhours($data) {
+        $this
+            ->select('SUM(hours) AS total_work_hours')
+            ->where('id_user =', $data['id_user']);
+
+        if (!empty($data['date_from']) && !empty($data['date_to'])) {
+            $this->where("date BETWEEN '" . $data['date_from'] . "' AND '" . $data['date_to'] . "'");
+        }
+
+        $total_workhours_row =  $this->get()->getResultArray();
+
+        if (!empty($total_workhours_row)) {
+            $total_workhours = $total_workhours_row[0]['total_work_hours'];
+        } else {
+            $total_workhours = 0;
+        }
+
+        return $total_workhours;
+    }
 }
