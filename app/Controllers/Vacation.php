@@ -5,10 +5,14 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class VacationCredit extends BaseController
+class Vacation extends BaseController
 {
     public function index()
     {
+
+
+
+
         //
     }
 }
