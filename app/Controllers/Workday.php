@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CostCenterModel;
+use App\Models\UserModel;
 use App\Models\WorkhourModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
@@ -13,13 +14,13 @@ class Workday extends BaseController
 {
     private $workhourmodel;
     private $costcentermodel;
-    private $session;
+    private UserModel $usermodel;
 
     public function __construct()
     {
         $this->workhourmodel = new WorkhourModel();
         $this->costcentermodel = new CostCenterModel();
-        $this->session = session();
+        $this->usermodel = new UserModel();
     }
 
     /**
@@ -28,7 +29,8 @@ class Workday extends BaseController
      */
     public function create()
     {
-        $user = $this->session->get('current_user');
+        $user_id = $this->request->getCookie('current_user_id');
+        $user = $this->usermodel->find($user_id);
         $date = $this->request->getPost('date');
 
         $workhour = $this->workhourmodel

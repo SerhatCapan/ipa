@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CostCenterModel;
+use App\Models\UserModel;
 use App\Models\WorkhourModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use ReflectionException;
@@ -12,13 +13,13 @@ class Workhour extends BaseController
 {
     private WorkhourModel $workhourmodel;
     private CostCenterModel $costcentermodel;
-    private $session;
+    private $usermodel;
 
     public function __construct()
     {
         $this->workhourmodel = new WorkhourModel();
         $this->costcentermodel = new CostCenterModel();
-        $this->session = session();
+        $this->usermodel = new UserModel();
     }
 
     /**
@@ -27,7 +28,9 @@ class Workhour extends BaseController
     public function create()
     {
         $date = $this->request->getPost('date');
-        $user = $this->session->get('current_user');
+        $user_id = $this->request->getCookie('current_user_id');
+        $user = $this->usermodel->find($user_id);
+
         $this->workhourmodel->insert([
             'id_user' => $user['id'],
             'date' => $date

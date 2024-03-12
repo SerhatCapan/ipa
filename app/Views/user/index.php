@@ -1,5 +1,5 @@
 <p class="uk-text-small uk-margin-remove">Benutzer</p>
-<h1 class="uk-margin-remove-top">Hallo <?= $current_user['name'] ?? '' ?>!</h1>
+<h1 class="uk-margin-remove-top"><?= $title ?></h1>
 <div class="uk-margin-medium-top">
     <form action="/user/switch" method="post">
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
@@ -11,7 +11,7 @@
                 </select>
             </div>
             <div>
-                <input type="submit" id="db-button-switch-user" class="uk-button uk-button-primary" value="Benutzer wechseln">
+                <input type="submit" id="db-button-switch-user" class="uk-button uk-button-primary" value="<?= $switch_user_button_title ?>">
             </div>
         </div>
     </form>

@@ -7,19 +7,37 @@ use ReflectionException;
 
 class User extends BaseController
 {
-    private UserModel $user_model;
-    private $session;
+    private UserModel $usermodel;
 
     public function __construct()
     {
-        $this->user_model = new UserModel();
-        $this->session = session();
+        $this->usermodel = new UserModel();
     }
 
     public function index() {
+        $user_id = $this->request->getCookie('current_user_id');
+        $users = $this->usermodel->findAll();
+
+        if ($user_id === null) {
+            $data = [
+                'current_user' => null,
+                'users' => $users,
+                'title' => 'Wähle ein Benutzer aus',
+                'switch_user_button_title' => 'Benutzer auswählen'
+            ];
+
+            return view('partials/header') .
+                view('/user/index', $data) .
+                view('partials/footer');
+        }
+
+        $user = $this->usermodel->find($user_id);
+
         $data = [
-            'current_user' => $this->session->get('current_user'),
-            'users' => $this->user_model->findAll()
+            'current_user' => $user,
+            'users' => $users,
+            'title' => 'Hallo ' . $user['name'],
+            'switch_user_button_title' => 'Benutzer wechseln'
         ];
 
         return view('partials/header') .
@@ -33,18 +51,15 @@ class User extends BaseController
      */
     public function create()
     {
-        $user = $this->user_model->where('name', '')->first();
+        $user = $this->usermodel->where('name', '')->first();
 
         if ($user === null) {
-            $this->user_model->insert([
+            $this->usermodel->insert([
                 'name' => $this->request->getPost('name')
             ]);
 
-            $user = $this->user_model->find($this->user_model->getInsertID());
+            $user = $this->usermodel->find($this->usermodel->getInsertID());
         }
-
-        // $session = session();
-        // $session->set($newdata);
     }
 
     /**
@@ -53,7 +68,7 @@ class User extends BaseController
     public function delete()
     {
         $id = $this->request->getPost('id');
-        $this->user_model->delete($id);
+        $this->usermodel->delete($id);
     }
 
     /**
@@ -63,9 +78,8 @@ class User extends BaseController
         // TODO: program the switch
         // the new user that should be switched to
         $id = $this->request->getPost('user');
-        $user = $this->user_model->find($id);
 
-        $this->session->set('current_user', $user);
+        setcookie('current_user_id', $id, strtotime('+365 days'), '/');
 
         // redirect didn't work with redirect() form codeigniter
         header("Location: " . base_url() . 'user');

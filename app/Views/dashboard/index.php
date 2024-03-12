@@ -2,6 +2,13 @@
 <h1 class="uk-margin-remove-top">Arbeitszeiterfassung</h1>
 <div class="uk-margin-medium-top">
 
+    <?php if ($current_user === null) { ?>
+        <div class="uk-alert-warning" uk-alert>
+            <a href class="uk-alert-close" uk-close></a>
+            <p>Kein Benutzer aktiv. <a href="<?= base_url() ?>user">Hier Benutzer auswählen</a></p>
+        </div>
+    <?php } else { ?>
+
     <div uk-grid class="uk-grid-small uk-child-width-1-6">
         <div>
             <input id="db-input-create-workday-date" class="uk-input" type="date" placeholder="Datum" aria-label="Datum" value="<?= date('Y-m-d'); ?>">
@@ -23,4 +30,6 @@
             </div>
         <?php } ?>
     </div>
+
+    <?php } ?>
 </div>
