@@ -50,4 +50,10 @@ $routes->post('/user/update', 'User::update');
 $routes->post('/user/delete', 'User::delete');
 $routes->post('/user/switch', 'User::switch');
 
+/**
+ * Settings
+ */
+$routes->get('/settings', 'Settings::index');
+$routes->post('/settings/update', 'Settings::update');
+
 

@@ -16,6 +16,11 @@ $sidebar = [
         "icon"  => "list",
     ],
     [
+        "label" => 'Einstellungen',
+        "page"  => "/settings",
+        "icon"  => "list",
+    ],
+    [
         "label" => 'Benutzer',
         "icon"  => "user",
         'nav-sub' => [

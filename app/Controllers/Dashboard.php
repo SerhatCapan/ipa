@@ -51,11 +51,16 @@ class Dashboard extends BaseController
 
        $workdays = $this->workhourmodel->get_as_workdays($data_workdays);
 
+       $date_from_format = Time::parse($date_from, 'Europe/Zurich');
+       $date_to_format = Time::parse($date_to, 'Europe/Zurich');
+       $calendar_time_period = $date_from_format->toLocalizedString('dd. MMM yyyy') . ' - ' .  $date_to_format->toLocalizedString('dd. MMM yyyy');
+
        $data = [
            'workdays' => $workdays,
            'costcenters' => $this->costcentermodel->findAll(),
            'current_user' => $user,
-           'calendar' => $calendar
+           'calendar' => $calendar,
+           'calendar_time_period' => $calendar_time_period
        ];
 
         return view('partials/header') .

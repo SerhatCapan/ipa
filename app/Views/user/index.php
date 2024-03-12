@@ -39,12 +39,6 @@
 
     <form class="uk-margin-top" action="/user/update" method="post">
         <div class="uk-margin">
-            <label class="uk-form-label" for="db-input-update-user-min-workhours-per-day">Minimum Arbeitsstunden pro Tag *</label>
-            <div class="uk-form-controls">
-                <input required class="uk-input" name="min-workhours-per-day" id="db-input-update-user-min-workhours-per-day" value="<?= esc($current_user['min_workhours_per_day']) ?>" type="text">
-            </div>
-        </div>
-        <div class="uk-margin">
             <label class="uk-form-label" for="db-input-update-user-name">Name *</label>
             <div class="uk-form-controls">
                 <input required class="uk-input" name="name" id="db-input-update-user-name" type="text" value="<?= esc($current_user['name']) ?>">
