@@ -1,8 +1,6 @@
 <p class="uk-text-small uk-margin-remove">Kostenstellen</p>
 <h1 class="uk-margin-remove-top">Kostenstellen</h1>
 <div class="uk-margin-medium-top">
-    <div id="db-container-messages-costcenter"></div>
-
     <form>
         <div class="uk-margin">
             <div class="uk-inline">
@@ -11,8 +9,7 @@
             </div>
         </div>
     </form>
-
-    <div id="container_table_costcenter">
+    <div id="db-container-table-costcenter">
     <?php
     echo $table;
     ?>

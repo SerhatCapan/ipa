@@ -1,43 +1,4 @@
 $(document).ready(function () {
-    // Passing options (with default options)
-    let input_create_workday_date = $('#db-input-create-workday-date')
-    let button_create_workday = $('#db-button-create-workday')
-    let container_workdays = $('#db-container-workdays');
-
-    button_create_workday.on('click', function () {
-        $.ajax({
-            url: "/workday/create",
-            method: "post",
-            headers: {'X-Requested-With': 'XMLHttpRequest'},
-            data: {
-                date: input_create_workday_date.val()
-            },
-
-            success: function (response) {
-                console.log(response)
-
-                switch (response.success) {
-                    case true:
-                        UIkit.notification({
-                            message: response.message,
-                            status: 'success',
-                            pos: 'top-right'
-                        });
-                        break;
-                    case false:
-                        UIkit.notification({
-                            message: response.message,
-                            status: 'danger',
-                            pos: 'top-right'
-                        });
-                        break;
-                }
-
-                container_workdays.prepend(response.html)
-            },
-        });
-    })
-
     $(document).on('click', '.db-icon-delete-workhour', function(event) {
         event.preventDefault()
 
@@ -55,12 +16,7 @@ $(document).ready(function () {
             success: function (response) {
                 $('[data-workhour-id="' + workhour_id + '"]').parent().remove();
                 $('#db-workhours-total-' + workhour_date).text(get_workday_total_hours(workhour_date));
-
-                UIkit.notification({
-                    message: response.message,
-                    status: 'success',
-                    pos: 'top-right'
-                });
+                db_notification(response)
             },
         });
     })

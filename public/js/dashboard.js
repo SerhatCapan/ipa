@@ -1,4 +1,15 @@
 $(document).ready(function() {
+    let input_create_workday_date = $('#db-input-create-workday-date')
+    let button_create_workday = $('#db-button-create-workday')
+    let container_workdays = $('#db-container-workdays');
+    let input_costcentergroup_date_from = $('#db-input-read-costcentergroup-date-from');
+    let input_costcentergroup_date_to = $('#db-input-read-costcentergroup-date-to');
+    let select_read_costcentergroup = $('#db-select-read-costcentergroup');
+    let costcentergroup_total_hours_in_time_period = $('#db-costcentergroup-total-hours-in-time-period')
+
+    // ---------------------------------------
+    // Dynamic Elements
+    // ---------------------------------------
     $(document).on('click', '.db-icon-add-costcenter', function(event) {
         event.preventDefault();
 
@@ -20,7 +31,6 @@ $(document).ready(function() {
             },
         });
     })
-
 
     $(document).on('input', '.db-workday-hour', function() {
         let max_number = 24;
@@ -60,11 +70,7 @@ $(document).ready(function() {
                     },
 
                     success: function (response) {
-                        UIkit.notification({
-                            message: response.message,
-                            status: 'success',
-                            pos: 'top-right'
-                        });
+                        db_notification(response)
                     },
                 });
             }
@@ -72,7 +78,6 @@ $(document).ready(function() {
             $(this).addClass('uk-text-danger');
         }
     });
-
 
     $(document).on('click', '.db-calendar-week', function() {
         let date_from = $(this).data('date-from');
@@ -82,44 +87,6 @@ $(document).ready(function() {
 
         window.location.href = base_url + '/dashboard?get_workdays=1&date_from=' + date_from + '&date_to=' + date_to;
     });
-
-    let input_create_workday_date = $('#db-input-create-workday-date')
-    let button_create_workday = $('#db-button-create-workday')
-    let container_workdays = $('#db-container-workdays');
-
-    button_create_workday.on('click', function () {
-        $.ajax({
-            url: "/workday/create",
-            method: "post",
-            headers: {'X-Requested-With': 'XMLHttpRequest'},
-            data: {
-                date: input_create_workday_date.val()
-            },
-
-            success: function (response) {
-                console.log(response)
-
-                switch (response.success) {
-                    case true:
-                        UIkit.notification({
-                            message: response.message,
-                            status: 'success',
-                            pos: 'top-right'
-                        });
-                        break;
-                    case false:
-                        UIkit.notification({
-                            message: response.message,
-                            status: 'danger',
-                            pos: 'top-right'
-                        });
-                        break;
-                }
-
-                container_workdays.prepend(response.html)
-            },
-        });
-    })
 
     $(document).on('click', '.db-icon-delete-workhour', function(event) {
         event.preventDefault()
@@ -164,15 +131,78 @@ $(document).ready(function() {
             },
 
             success: function (response) {
-                UIkit.notification({
-                    message: response.message,
-                    status: 'success',
-                    pos: 'top-right'
-                });
+                db_notification(response)
             },
         });
     });
 
+    // ---------------------------------------
+    // Non-Dynamic Elements
+    // ---------------------------------------
+    button_create_workday.on('click', function () {
+        $.ajax({
+            url: "/workday/create",
+            method: "post",
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            data: {
+                date: input_create_workday_date.val()
+            },
+
+            success: function (response) {
+                db_notification(response)
+                container_workdays.prepend(response.html)
+            },
+        });
+    })
+
+    input_costcentergroup_date_from.on('input', function() {
+        set_costcentergroup_total_workhours()
+    });
+
+    input_costcentergroup_date_to.on('input', function() {
+        set_costcentergroup_total_workhours()
+    });
+
+    select_read_costcentergroup.on('change', function() {
+        set_costcentergroup_total_workhours();
+    });
+
+    // ---------------------------------------
+    // Functions
+    // ---------------------------------------
+    function set_costcentergroup_total_workhours() {
+       let type = select_read_costcentergroup.find(":selected").data('type')
+
+        if (typeof type === "undefined") {
+            return;
+        }
+
+        console.log("/" + type + "/read")
+        console.log(select_read_costcentergroup.val())
+        console.log(input_costcentergroup_date_from.val())
+        console.log(input_costcentergroup_date_to.val())
+
+        $.ajax({
+            url: "/" + type + "/read",
+            method: "post",
+            data: {
+                'id': select_read_costcentergroup.val(),
+                'date_from': input_costcentergroup_date_from.val(),
+                'date_to': input_costcentergroup_date_to.val(),
+            },
+
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            success: function (response) {
+                db_notification(response)
+                costcentergroup_total_hours_in_time_period.text(response.total_work_hours)
+            },
+
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+
+    }
 
     function get_workday_total_hours(workhour_date) {
         let total_hours = 0;

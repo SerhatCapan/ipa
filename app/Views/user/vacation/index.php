@@ -2,7 +2,8 @@
 <h1 class="uk-margin-remove-top">Ferien</h1>
 <div class="uk-margin-medium-top">
     <div id="db-container-messages-holiday"></div>
-    <p>Ferienguthaben vom <?= $vacation_credit_date_from ?> - <?= $vacation_credit_date_to ?>: <?= $vacation_credit ?> Tage</p>
+    <p>Restliche Ferienguthaben vom <?= $vacation_credit_date_from ?> - <?= $vacation_credit_date_to ?>: <?= $vacation_remaining_credits ?> Tage</p>
+
     <form method="post" action="/user/vacation/create">
         <div class="uk-margin">
             <div>
@@ -27,7 +28,7 @@
         </div>
     </form>
 
-    <div id="container_table_vacation">
+    <div id="db-container-table-vacation">
         <?php
         echo $table ?? '';
         ?>

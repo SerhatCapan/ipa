@@ -2,7 +2,6 @@
 <h1 class="uk-margin-remove-top">Kostenstellen-Gruppen</h1>
 <div class="uk-margin-medium-top">
     <div id="db-container-messages-costcenter-group"></div>
-
     <form>
         <div class="uk-margin">
             <div class="uk-inline">
@@ -11,7 +10,6 @@
             </div>
         </div>
     </form>
-
     <div id="db-container-table-costcenter-group">
         <?php
         echo $table;

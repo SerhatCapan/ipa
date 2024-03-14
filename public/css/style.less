@@ -24,7 +24,6 @@
   outline: none;
 }
 
-
 .db-container {
   margin-left: 320px;
   width: 80%;
@@ -48,12 +47,23 @@
   }
 
   td {
-    background: lighten(@color-green, 40%);
+    background-color: lighten(@color-green, 40%);
   }
 
-  .db-calendar-week-selected {
-    td {
-      background-color: @color-green;
-    }
+  .db-calendar-week-selected td {
+    background-color: @color-green;
   }
+
+  .db-calendar-day-vacation {
+    background-color: red !important;
+  }
+
+  .db-calendar-day-absence {
+    background-color: green !important;
+  }
+
+  .db-calendar-day-holiday {
+    background-color: blue !important;
+  }
+
 }

@@ -33,6 +33,10 @@ $sidebar = [
                 "page"  => "/user/vacation",
             ],
             [
+                "label" => 'Ferienguthaben',
+                "page"  => "/user/vacation-credit",
+            ],
+            [
                 "label" => 'Absenzen',
                 "page"  => "/user/absence",
             ]

@@ -12222,9 +12222,18 @@ iframe.uk-cover {
   cursor: pointer;
 }
 .db-calendar td {
-  background: #abfde8;
+  background-color: #abfde8;
 }
 .db-calendar .db-calendar-week-selected td {
   background-color: #06D6A0;
+}
+.db-calendar .db-calendar-day-vacation {
+  background-color: red !important;
+}
+.db-calendar .db-calendar-day-absence {
+  background-color: green !important;
+}
+.db-calendar .db-calendar-day-holiday {
+  background-color: blue !important;
 }
 /*# sourceMappingURL=style.css.map */

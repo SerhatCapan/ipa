@@ -1,11 +1,27 @@
 $(document).ready(function () {
-    let list_costcenters = $('#db-list-costcenters')
+    let container_table_costcenter =  $('#db-container-table-costcenter');
     let input_create_costcenter = $('#db-input-create-costcenter');
-    let container_messages_costcenter = $('#db-container-messages-costcenter');
+    let button_create_costcenter = $('#db-button-create-costcenter');
 
-    $('#db-button-create-costcenter').on("click", function (event) {
+    /**
+     * Fires after clicking on the plus
+     */
+    button_create_costcenter.on("click", function (event) {
         event.preventDefault();
+        create_costcenter();
+    })
 
+    /**
+     * Fires when "enter" is pressed on the keyboard on the input
+     */
+    input_create_costcenter.keypress(function(event) {
+        if (event.which === 13) {
+            event.preventDefault();
+            create_costcenter()
+        }
+    });
+
+    function create_costcenter(){
         $.ajax({
             url: "/costcenter/create",
             method: "post",
@@ -15,24 +31,20 @@ $(document).ready(function () {
             },
 
             success: function (response) {
-                list_costcenters.append('<tr><td><a href="' + response.costcenter['id'] + '">' + response.costcenter['name'] + '</a></td></tr>')
-                container_messages_costcenter.append(
-                    '<div class="uk-alert-success" uk-alert>' +
-                        '<a href class="uk-alert-close" uk-close></a>' +
-                        '<p>' + response.message + '</p>' +
-                    '</div>'
-                )
+                db_notification(response)
+                container_table_costcenter.empty();
+                container_table_costcenter.append(response.html)
             },
         });
-    })
+    }
 
-    $('#db-icon-trash-costcenter').on('click', function (event) {
+    $(document).on('click', '.db-icon-delete-costcenter', function(event) {
         event.preventDefault();
 
-        let id = $(this).closest('tr').data('costcenter-id');
+        let id = $(this).data('id-costcenter');
 
         $.ajax({
-            url: "/costcenter/trash",
+            url: "/costcenter/delete",
             method: "post",
             headers: {'X-Requested-With': 'XMLHttpRequest'},
             data: {
@@ -40,10 +52,38 @@ $(document).ready(function () {
             },
 
             success: function (response) {
-                list_costcenters.append('<li><a href="' + response.costcenter['id'] + '">' + response.costcenter['name'] + '</a></li>')
-                console.log("Cost center created successfully:", response);
+                db_notification(response)
+                container_table_costcenter.empty()
+                container_table_costcenter.append(response.html)
             },
         });
     })
+
+    $(document).on('change', '.db-select-update-costcenter', function(event) {
+        event.preventDefault();
+
+        let id = $(this).data('id-costcenter');
+        let name = $('.db-input-update-costcenter-name[data-id-costcenter="' + id + '"]').text();
+
+        console.log(id)
+        console.log($(this).val())
+        console.log(name)
+
+        $.ajax({
+            url: "/costcenter/update",
+            method: "post",
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            data: {
+                id: id,
+                id_costcenter_group: $(this).val(),
+                name: name
+            },
+
+            success: function (response) {
+                db_notification(response)
+            },
+        });
+    })
+
 
 });

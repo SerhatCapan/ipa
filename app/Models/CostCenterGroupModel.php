@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controllers\CostCenter;
 use CodeIgniter\Model;
 
 class CostCenterGroupModel extends Model
@@ -12,7 +13,7 @@ class CostCenterGroupModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name'];
+    protected $allowedFields    = ['name', 'delete'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -39,4 +40,27 @@ class CostCenterGroupModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function get_table_html() {
+        $table = get_table_template();
+        $table->setHeading('Name', '');
+        $costcentermodel = new CostCenterModel();
+        $costcenter_groups = $this->findAll();
+
+        foreach ($costcenter_groups as $costcenter_group) {
+            if ($costcenter_group['delete'] == 1) {
+                $table->addRow(
+                    '<span class="uk-text-muted db-input-update-costcenter-group-name" data-id-costcenter-group="' . $costcenter_group['id'] .  '">' . esc($costcenter_group['name']) . '</span>'
+                );
+            } else {
+                $table->addRow(
+                    '<span contenteditable class="db-input-update-costcenter-group-name" data-id-costcenter-group="' . $costcenter_group['id'] .  '">' . esc($costcenter_group['name']) . '</span>',
+                    '<a uk-tooltip="Kostenstellen-Gruppe löschen" class="db-icon-delete-costcenter-group uk-icon-link uk-margin-small-right" data-id-costcenter-group="' . $costcenter_group['id'] .  '" uk-icon="trash"></a>'
+                );
+            }
+        }
+
+        return $table->generate();
+    }
 }

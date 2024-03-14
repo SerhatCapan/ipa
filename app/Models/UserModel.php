@@ -40,4 +40,32 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    /**
+     * TODO: needs to look on these things:
+     * - Holidays
+     * - Vacation
+     * - Absences
+     *
+     * @param $user
+     * @return int
+     */
+    public function get_overtime($user) {
+        $workhourmodel = new WorkhourModel();
+        $total_workhours_row = $workhourmodel
+            ->select('SUM(hours) AS total_work_hours')
+            ->where('id_user =', $user['id'])
+            ->where('date >=', $user['date_from_overtime'])
+            ->get()->getResultArray();
+
+        if (!empty($total_workhours_row)) {
+            $total_workhours = $total_workhours_row[0]['total_work_hours'];
+        } else {
+            $total_workhours = 0;
+        }
+
+        // return $total_workhours;
+        return 0;
+    }
 }

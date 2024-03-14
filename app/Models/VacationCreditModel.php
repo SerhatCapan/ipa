@@ -12,7 +12,7 @@ class VacationCreditModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id_user', 'date_from', 'date_to', 'credit'];
 
     protected bool $allowEmptyInserts = false;
 
@@ -39,4 +39,21 @@ class VacationCreditModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    /**
+     * Gets the vacation credit of the given date.
+     *
+     * @param string $date
+     * @return array
+     */
+    function get_vacation_credit_from_date(string $date) {
+        $vacation_credit = $this
+            ->select()
+            ->where('date_from <=', $date)
+            ->where('date_to >=', $date)
+            ->get()->getResultArray();
+
+        return $vacation_credit[0];
+    }
 }

@@ -4,21 +4,24 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CostCenterGroupModel;
+use App\Models\CostCenterModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class CostCenterGroup extends BaseController
 {
-    private CostCenterGroupModel $costcenter_group;
+    private CostCenterGroupModel $costcentergroupmodel;
+    private CostCenterModel $costcentermodel;
 
     public function __construct()
     {
-        $this->costcenter_group = new CostCenterGroupModel();
+        $this->costcentergroupmodel = new CostCenterGroupModel();
+        $this->costcentermodel = new CostCenterModel();
     }
 
     public function index() {
 
         $data = [
-            "table" => $this->get_table($this->costcenter_group->findAll())
+            "table" => $this->costcentergroupmodel->get_table_html()
         ];
 
         return view('partials/header') .
@@ -29,30 +32,55 @@ class CostCenterGroup extends BaseController
     public function create()
     {
         $name = $this->request->getPost('name');
-        $existing_row = $this->costcenter_group->where('name', $name)->first();
+        $existing_row = $this->costcentergroupmodel->where('name', $name)->first();
 
         if ($existing_row !== null) {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => "Es existiert bereits eine Kostenstellen-Gruppe mit dem Namen.",
-                'table' => $this->get_table($this->costcenter_group->findAll())
+                'html' => $this->costcentergroupmodel->get_table_html()
             ]);
         }
 
-        $this->costcenter_group->insert([
+        $this->costcentergroupmodel->insert([
             'name' => $this->request->getPost('name')
         ]);
 
-        return $this->response->setJSON([
+        $return = [
             'success' => true,
             'message' => "Kostenstelle-Gruppe wurde erstellt",
-            'table' => $this->get_table($this->costcenter_group->findAll()),
-        ]);
+            'html' => $this->costcentergroupmodel->get_table_html()
+        ];
+
+        return $this->response->setJSON($return);
     }
 
-    public function read($id)
+    public function read()
     {
+        $id = $this->request->getPost('id');
+        $id_user = $this->request->getCookie('current_user_id');
+        $date_from = $this->request->getPost('date_from');
+        $date_to = $this->request->getPost('date_to');
+        $total_work_hours = 0;
 
+        $costcenters = $this->costcentermodel
+            ->select()
+            ->where('id_costcenter_group =', $id)
+            ->get()->getResultArray();
+
+        if (!empty($costcenters)) {
+            foreach ($costcenters as $costcenter) {
+                $total_work_hours += $this->costcentermodel->get_total_workhours_of_costcenter($costcenter['id'], $id_user, $date_from, $date_to);
+            }
+        }
+
+        $return = [
+            'success' => true,
+            'message' => "Anzahl Stunden wurden ausgerechnet",
+            'total_work_hours' => $total_work_hours
+        ];
+
+        return $this->response->setJSON($return);
     }
 
     public function update($id, $data)
@@ -60,24 +88,53 @@ class CostCenterGroup extends BaseController
 
     }
 
-    public function delete($id)
+    /**
+     * Deletes costcentergroup
+     *
+     * Required:
+     * - id (id of the costcentergroup)
+     *
+     * @return ResponseInterface
+     * @throws \ReflectionException
+     */
+    public function delete()
     {
+        $id = $this->request->getPost('id');
+        $costcentermodel = new CostCenterModel();
 
-    }
+        $costcenters = $this->costcentermodel
+            ->select()
+            ->where('id_costcenter_group =', $id)
+            ->get()->getResultArray();
 
-    public function get_table($costcenters) {
-        $table = get_table_template();
-        $table->setHeading('Name', 'Arbeitsstunden', ' ');
 
+        // delete each costcenter
         foreach ($costcenters as $costcenter) {
-            $table->addRow(
-                '<a uk-tooltip="Kostenstelle-Gruppe bearbeiten" href="/costcenter/' . $costcenter['id'] . '">' . $costcenter['name'] . '</a>',
-                20,
-                '<a id="db-icon-edit-costcenter-group" uk-tooltip="Kostenstellen-Gruppe bearbeiten" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
-                <a id="db-icon-trash-costcenter-group" uk-tooltip="Kostenstellen-Gruppe löschen" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
-            );
+            $costcentermodel->delete_costcenter($costcenter['id']);
         }
 
-        return $table->generate();
+        $costcenters = $this->costcentermodel
+            ->select()
+            ->where('id_costcenter_group =', $id)
+            ->get()->getResultArray();
+
+
+        // check if costcenter-group has any costcenters left. If not delete completely.
+        if (empty($costcenters)) {
+            $this->costcentergroupmodel->delete($id);
+
+        } else {
+            $this->costcentergroupmodel
+                ->set('delete', 1)
+                ->update($id);
+        }
+
+        $return = [
+            'success' => true,
+            'message' => "Kostenstellen-Gruppe wurde gelöscht",
+            'html' => $this->costcentergroupmodel->get_table_html(),
+        ];
+
+        return $this->response->setJSON($return);
     }
 }

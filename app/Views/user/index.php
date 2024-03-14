@@ -37,6 +37,8 @@
         </div>
     </form>
 
+    <?php if (!empty($current_user)) { ?>
+
     <form class="uk-margin-top" action="/user/update" method="post">
         <div class="uk-margin">
             <label class="uk-form-label" for="db-input-update-user-name">Name *</label>
@@ -58,4 +60,6 @@
             <input type="submit" class="uk-button-primary uk-button" value="Einstellungen speichern">
         </div>
     </form>
+
+    <?php } ?>
 </div>

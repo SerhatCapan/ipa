@@ -4,16 +4,20 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CostCenterModel;
+use App\Models\WorkhourModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use ReflectionException;
 
 class CostCenter extends BaseController
 {
-    private CostCenterModel $costcenter;
+    private CostCenterModel $costcentermodel;
+    private $workhourmodel;
 
     public function __construct()
     {
-        $this->costcenter = new CostCenterModel();
+        $this->costcentermodel = new CostCenterModel();
+        $this->workhourmodel = new WorkhourModel();
+
     }
 
     /**
@@ -24,21 +28,9 @@ class CostCenter extends BaseController
      * @return string
      */
     public function index() {
-        $table = get_table_template();
-        $table->setHeading('Name', 'Kostenstellen-Gruppe', 'Arbeitsstunden', ' ');
-
-        foreach ($this->costcenter->findAll() as $costcenter) {
-            $table->addRow(
-                '<a uk-tooltip="Kostenstelle bearbeiten" href="/costcenter/' . $costcenter['id'] . '">' . $costcenter['name'] . '</a>',
-                'Gruppe',
-                20,
-                '<a id="icon_edit_costcenter" uk-tooltip="Kostenstelle bearbeiten" href="costcenter/edit/' .  $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
-                <a id="db-icon-trash-costcenter" uk-tooltip="Kostenstelle löschen" href="costcenter/trash/' . $costcenter['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
-            );
-        }
 
         $data = [
-            "table" => $table->generate()
+            "table" => $this->costcentermodel->get_table_html()
         ];
 
         return view('partials/header') .
@@ -46,7 +38,14 @@ class CostCenter extends BaseController
             view('partials/footer');
     }
 
+
     /**
+     * Creates a costcenter.
+     *
+     * Requires:
+     * - 'name' (name of the new costcenter)
+     *
+     * @return ResponseInterface
      * @throws ReflectionException
      */
     public function create(): ResponseInterface {
@@ -54,12 +53,12 @@ class CostCenter extends BaseController
             'name' => $this->request->getPost('name')
         ];
 
-        $this->costcenter->insert($data);
+        $this->costcentermodel->insert($data);
 
         $response = [
             'success' => true,
-            'costcenter' => $this->costcenter->find($this->costcenter->getInsertID()),
-            'message' => "Kostenstelle wurde erstellt"
+            'message' => "Kostenstelle wurde erstellt",
+            'html' => $this->costcentermodel->get_table_html(),
         ];
 
         return $this->response->setJSON($response);
@@ -68,24 +67,73 @@ class CostCenter extends BaseController
 
     public function read()
     {
-        $data = [
-            'id' => $this->request->getGet('id'),
-            'from_date' => $this->request->getGet('from_date'),
-            'to_date' => $this->request->getGet('to_date'),
+        $id = $this->request->getPost('id');
+        $id_user = $this->request->getCookie('current_user_id');
+        $date_from = $this->request->getPost('date_from');
+        $date_to = $this->request->getPost('date_to');
+        $total_work_hours = $this->costcentermodel->get_total_workhours_of_costcenter($id, $id_user, $date_from, $date_to);
+
+        $return = [
+            'success' => true,
+            'message' => "Anzahl Stunden wurden ausgerechnet",
+            'total_work_hours' => $total_work_hours
         ];
 
-        $data = $this->costcenter->find($data);
+        return $this->response->setJSON($return);
     }
 
 
-    public function update($id, $data)
+    /**
+     * Updates a costcenter.
+     *
+     * Requires:
+     * - 'id' (id of the costcenter)
+     * - 'id_costcenter_group' (id of the costcenter-group)
+     * - 'name' (new name for the costcenter)
+     *
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function update(): ResponseInterface
     {
+        $id = $this->request->getPost('id');
+        $id_costcenter_group = $this->request->getPost('id_costcenter_group');
+        $name = $this->request->getPost('name');
 
+        $this->costcentermodel
+            ->set('id_costcenter_group', $id_costcenter_group)
+            ->set('name', $name)
+            ->update($id);
+
+        $return = [
+            'success' => true,
+            'message' => 'Kostenstelle wurde aktualisiert'
+        ];
+
+        return $this->response->setJSON($return);
     }
 
 
-    public function delete($id)
+    /**
+     * Deletes the costcenter
+     *
+     * Requires:
+     * - 'id' (id of the costcenter)
+     *
+     * @throws ReflectionException
+     * @throws ReflectionException
+     */
+    public function delete(): ResponseInterface
     {
+        $this->costcentermodel->delete_costcenter($id);
 
+        $table = $this->costcentermodel->get_table_html();
+        $return = [
+            'success' => true,
+            'message' => "Kostenstelle wurde gelöscht",
+            'html' => $table
+        ];
+
+        return $this->response->setJSON($return);
     }
 }

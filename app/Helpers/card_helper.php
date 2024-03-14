@@ -52,6 +52,7 @@ function get_html_dashboard_card_row($data) {
     ?>
     <div class="uk-width-3-5">
         <select data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>"  class="db-select-workhour-costcenter uk-select" aria-label="Select">
+            <option value="">Auswählen</option>
             <?php foreach ($data['costcenters'] as $costcenter) { ?>
                 <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= esc($costcenter['name']) ?></option>
             <?php } ?>

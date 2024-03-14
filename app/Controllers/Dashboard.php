@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\CostCenterGroupModel;
 use App\Models\CostCenterModel;
 use App\Models\OptionModel;
 use App\Models\UserModel;
+use App\Models\VacationModel;
 use App\Models\WorkhourModel;
 use CodeIgniter\I18n\Time;
 use Exception;
@@ -15,6 +17,8 @@ class Dashboard extends BaseController
     private CostCenterModel $costcentermodel;
     private OptionModel $optionmodel;
     private UserModel $usermodel;
+    private VacationModel $vacationmodel;
+    private CostCenterGroupModel $costcentergroupmodel;
 
     public function __construct()
     {
@@ -22,6 +26,8 @@ class Dashboard extends BaseController
         $this->costcentermodel = new CostCenterModel();
         $this->usermodel = new UserModel();
         $this->optionmodel = new OptionModel();
+        $this->vacationmodel = new VacationModel();
+        $this->costcentergroupmodel = new CostCenterGroupModel();
     }
 
     /**
@@ -34,7 +40,6 @@ class Dashboard extends BaseController
         $date_to = $this->request->getGet('date_to') ?? date('Y-m-d', strtotime('friday this week'));
         $date_from_format = Time::parse($date_from, 'Europe/Zurich');
         $date_to_format = Time::parse($date_to, 'Europe/Zurich');
-        $calendar_time_period = $date_from_format->toLocalizedString('dd. MMM yyyy') . ' - ' . $date_to_format->toLocalizedString('dd. MMM yyyy');
 
         if ($id_user === null) {
             $data = [
@@ -42,7 +47,8 @@ class Dashboard extends BaseController
                 'costcenters' => null,
                 'current_user' => null,
                 'weekly_analysis' => null,
-                'calendar_time_period' => $calendar_time_period
+                'date_from' => $date_from_format,
+                'date_to' => $date_to_format,
             ];
 
             return view('partials/header') .
@@ -50,31 +56,23 @@ class Dashboard extends BaseController
                 view('partials/footer');
         }
 
-
         $user = $this->usermodel->find($id_user);
         $data_workdays['id_user'] = $user['id'];
         $data_workdays['date_from'] = $date_from;
         $data_workdays['date_to'] = $date_to;
-
         $calendar = $this->get_calendar($date_from, $date_to);
-
         $workdays = $this->workhourmodel->get_as_workdays($data_workdays);
 
         $data = [
             'workdays' => $workdays,
             'costcenters' => $this->costcentermodel->findAll(),
+            'costcentergroups' => $this->costcentergroupmodel->findAll(),
             'current_user' => $user,
             'calendar' => $calendar,
-            'calendar_time_period' => $calendar_time_period,
-            'weekly_analysis' => [
-                'total_workhours' => $this->workhourmodel->get_total_workhhours([
-                    'id_user' => $id_user,
-                    'date_from' => $date_from,
-                    'date_to' => $date_to,
-                ]),
-
-                'should_workhours' => $this->optionmodel->get_workhours_per_day() * 5 // TODO: Won't work if Absence, Feast Day or Holiday was taken
-            ]
+            'date_from' => $date_from_format,
+            'date_to' => $date_to_format,
+            'overtime' => $this->usermodel->get_overtime($user),
+            'vacation_remaining_credits' => $this->vacationmodel->get_vacation($date_from)['vacation_remaining_credits'],
         ];
 
         return view('partials/header') .
@@ -85,6 +83,9 @@ class Dashboard extends BaseController
 
     private function get_calendar($selected_date_from, $selected_date_to)
     {
+        $vacationmodel = new VacationModel();
+
+
         $calendar = [];
         $startday = strtotime('last Monday', strtotime($selected_date_from));
 
@@ -95,7 +96,25 @@ class Dashboard extends BaseController
             $friday_of_current_week = date('Y-m-d', strtotime("+4 day", $startday));
 
             for ($j = 0; $j < 5; $j++) {
-                $week_days[] = date('Y-m-d', strtotime("+$j day", $startday));
+                $date = date('Y-m-d', strtotime("+$j day", $startday));
+                $type = 'workday';
+                $tooltip = "";
+
+                $vacation_day = $vacationmodel
+                    ->select()
+                    ->where('date', $date)
+                    ->get()->getResultArray();
+
+                if (!empty($vacation_day)) {
+                    $type = "vacation";
+                    $tooltip = "Ferien - " . $vacation_day[0]['hours'] . "h";
+                }
+
+                $week_days[] = [
+                    "type" => $type,
+                    "date" => $date,
+                    "tooltip" => $tooltip
+                ];
             }
 
             if ($monday_of_current_week === $selected_date_from && $friday_of_current_week === $selected_date_to) {

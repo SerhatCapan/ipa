@@ -1,6 +1,5 @@
 $(document).ready(function () {
     let input_create_costcenter_group = $('#db-input-create-costcenter-group');
-    let container_messages_costcenter_group = $('#db-container-messages-costcenter-group');
     let button_create_costcenter_group = $('#db-button-create-costcenter-group');
     let container_table_costcenter_group = $('#db-container-table-costcenter-group')
 
@@ -9,7 +8,7 @@ $(document).ready(function () {
      */
     button_create_costcenter_group.on("click", function (event) {
         event.preventDefault();
-        update_table_costcenter_group();
+        create_table_costcenter_group();
     })
 
     /**
@@ -18,15 +17,35 @@ $(document).ready(function () {
     input_create_costcenter_group.on('keydown', function(event) {
         if (event.which === 13) {
             event.preventDefault();
-            update_table_costcenter_group();
+            create_table_costcenter_group();
         }
     });
 
+    $(document).on('click', '.db-icon-delete-costcenter-group', function(event) {
+        event.preventDefault();
+
+        let id = $(this).data('id-costcenter-group');
+
+        $.ajax({
+            url: "/costcenter-group/delete",
+            method: "post",
+            headers: {'X-Requested-With': 'XMLHttpRequest'},
+            data: {
+                id: id
+            },
+
+            success: function (response) {
+                db_notification(response)
+                container_table_costcenter_group.empty()
+                container_table_costcenter_group.append(response.html)
+            },
+        });
+    })
 
     /**
      * Updates the table and echos an alert.
      */
-    function update_table_costcenter_group() {
+    function create_table_costcenter_group() {
         $.ajax({
             url: "/costcenter-group/create",
             method: "post",
@@ -36,26 +55,9 @@ $(document).ready(function () {
             },
 
             success: function (response) {
+                db_notification(response)
                 container_table_costcenter_group.empty()
-                container_table_costcenter_group.append(response.table)
-
-                let alert_type;
-
-                switch (response.success) {
-                    case true:
-                        alert_type = 'success';
-                        break;
-                    case false:
-                        alert_type = 'danger'
-                        break;
-                }
-
-                container_messages_costcenter_group.append(
-                    '<div class="uk-alert-' + alert_type + '" uk-alert>' +
-                    '<a href class="uk-alert-close" uk-close></a>' +
-                    '<p>' + response.message + '</p>' +
-                    '</div>'
-                )
+                container_table_costcenter_group.append(response.html)
             },
         });
     }

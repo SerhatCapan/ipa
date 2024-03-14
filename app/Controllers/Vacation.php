@@ -35,36 +35,15 @@ class Vacation extends BaseController
                 view('partials/footer');
         }
 
-        $vacation_credit = $this->vacationcreditmodel
-            ->select()
-            ->where('id_user', $id_user)
-            ->get()->getResultArray();
-
-        $vacation = $this->vacationmodel
-            ->select()
-            ->where('id_user', $id_user)
-            ->get()->getResultArray();
-
-        $table = get_table_template();
-        $table->setHeading([
-            'Tag',
-            'Stunden'
-        ]);
-
-        foreach ($vacation as $day) {
-            $table->addRow(
-                '<a id="/user/vacation/' . $day['id'] . '">' . $day['date'] .  '</a>',
-                $day['hours'],
-                '<a id="db-icon-edit-vacation" uk-tooltip="Ferientag bearbeiten" href="vacation/edit/' .  $day['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="pencil"></a>
-                <a id="db-icon-trash-vacation" uk-tooltip="Feiertag löschen" href="vacation/delete/' . $day['id'] . '" class="uk-icon-link uk-margin-small-right" uk-icon="trash"></a>'
-            );
-        }
+        $table = $this->vacationmodel->get_table_html();
+        $vacation = $this->vacationmodel->get_vacation(date('Y-m-d', strtotime('now')));
 
         $data = [
-            'vacation_credit_date_from' => $vacation_credit[0]['date_from'],
-            'vacation_credit_date_to' => $vacation_credit[0]['date_to'],
-            'vacation_credit' => $vacation_credit[0]['credit'],
-            'table' => $table->generate()
+            'vacation_credit_date_from' => $vacation['vacation_credit']['date_from'],
+            'vacation_credit_date_to' => $vacation['vacation_credit']['date_to'],
+            'vacation_credit' => $vacation['vacation_credit']['credit'],
+            'vacation_remaining_credits' => $vacation['vacation_remaining_credits'],
+            'table' => $table
         ];
 
         return view('partials/header') .
@@ -81,7 +60,10 @@ class Vacation extends BaseController
         $end_timestamp = strtotime($date_to);
 
         while ($current_date <= $end_timestamp) {
-            $date_array[] = date('Y-m-d', $current_date);
+            // Check if current day is not Saturday (6) or Sunday (0)
+            if (date('N', $current_date) < 6) {
+                $date_array[] = date('Y-m-d', $current_date);
+            }
             $current_date = strtotime('+1 day', $current_date);
         }
 
@@ -114,7 +96,8 @@ class Vacation extends BaseController
 
         $return = [
             'success' => true,
-            'message' => 'Ferientag wurde gelöscht'
+            'message' => 'Ferientag wurde gelöscht',
+            'html' =>  $this->vacationmodel->get_table_html()
         ];
 
         return $this->response->setJSON($return);
