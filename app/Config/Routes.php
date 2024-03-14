@@ -53,19 +53,22 @@ $routes->post('/user/delete', 'User::delete');
 $routes->post('/user/switch', 'User::switch');
 
 $routes->get('/user/vacation/', 'Vacation::index');
-$routes->get('/user/vacation/(:any)', 'Vacation::index');
 $routes->post('/user/vacation/create', 'Vacation::create');
 $routes->get('/user/vacation/read', 'Vacation::read');
 $routes->post('/user/vacation/update', 'Vacation::update');
 $routes->post('/user/vacation/delete', 'Vacation::delete');
 
 $routes->get('/user/vacation-credit/', 'VacationCredit::index');
-$routes->get('/user/vacation-credit/(:any)', 'VacationCredit::index');
 $routes->post('/user/vacation-credit/create', 'VacationCredit::create');
 $routes->get('/user/vacation-credit/read', 'VacationCredit::read');
 $routes->post('/user/vacation-credit/update', 'VacationCredit::update');
 $routes->post('/user/vacation-credit/delete', 'VacationCredit::delete');
 
+$routes->get('/user/absence/', 'Absence::index');
+$routes->post('/user/absence/create', 'Absence::create');
+$routes->get('/user/absence/read', 'Absence::read');
+$routes->post('/user/absence/update', 'Absence::update');
+$routes->post('/user/absence/delete', 'Absence::delete');
 
 /**
  * Settings
