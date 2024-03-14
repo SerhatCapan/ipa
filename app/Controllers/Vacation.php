@@ -20,11 +20,11 @@ class Vacation extends BaseController
 
     public function index()
     {
-        $data = [];
         $id_user = $this->request->getCookie('current_user_id');
 
         if ($id_user === null) {
             $data = [
+                'current_user' => null,
                 'vacation_credit_date_from' => null,
                 'vacation_credit_date_to ' => null,
                 'vacation_credit ' => null,
@@ -39,6 +39,7 @@ class Vacation extends BaseController
         $vacation = $this->vacationmodel->get_vacation(date('Y-m-d', strtotime('now')));
 
         $data = [
+            'current_user' => $id_user,
             'vacation_credit_date_from' => $vacation['vacation_credit']['date_from'],
             'vacation_credit_date_to' => $vacation['vacation_credit']['date_to'],
             'vacation_credit' => $vacation['vacation_credit']['credit'],

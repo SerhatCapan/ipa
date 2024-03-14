@@ -14,13 +14,9 @@
                 $alert = 'warning';
                 break;
         }
-        ?>
 
-        <div class="uk-alert-<?= $alert ?>" uk-alert>
-            <a href class="uk-alert-close" uk-close></a>
-            <p><?= $return['message'] ?></p>
-        </div>
-    <?php } ?>
+        render_alert($alert, $return['message']);
+     } ?>
 
     <form class="uk-margin-top" action="/settings/update" method="post">
         <div class="uk-margin">

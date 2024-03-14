@@ -41,6 +41,15 @@ class CostCenterModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * Return the calculated hours worked on a costcenter.
+     *
+     * @param int $id_costcenter
+     * @param int $id_user
+     * @param string|null $date_from
+     * @param string|null $date_to
+     * @return int|mixed
+     */
     public function get_total_workhours_of_costcenter(int $id_costcenter, int $id_user, string $date_from = null, string $date_to = null) {
         $costcenter = new CostCenterModel();
         $costcenter
@@ -55,13 +64,24 @@ class CostCenterModel extends Model
 
             $total_work_hours = $costcenter->get()->getResultArray();
 
-        $query = $costcenter->getLastQuery();
 
         if (!empty($total_work_hours[0]['total_work_hours'])) {
             return $total_work_hours[0]['total_work_hours'];
         } else {
             return 0;
         }
+    }
+
+    public function get_costcenters($with_deleted = false) {
+        $this
+            ->select('ipa_costcenter.name, ipa_costcenter_group.name AS costcenter_group_name, ipa_costcenter.id, ipa_costcenter.delete')
+            ->join('ipa_costcenter_group', 'ipa_costcenter_group.id = ipa_costcenter.id_costcenter_group', 'left');
+
+            if ($with_deleted) {
+                $this->where('ipa_costcenter.delete != ', 1);
+            }
+
+            return $this->get()->getResultArray();
     }
 
     public function get_table_html() {
@@ -82,8 +102,8 @@ class CostCenterModel extends Model
         foreach ($costcenters as $costcenter) {
             if ($costcenter['delete'] == 1) {
                 $table->addRow(
-                    esc($costcenter['name']),
-                    esc($costcenter['costcenter_group_name']),
+                    '<span class="uk-text-muted">' . esc($costcenter['name']) .'</span>',
+                    '<span class="uk-text-muted">' . esc($costcenter['costcenter_group_name']). '</span>',
                 );
 
             } else {

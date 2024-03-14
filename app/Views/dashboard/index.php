@@ -2,12 +2,9 @@
 <h1 class="uk-margin-remove-top"><?= $date_from->toLocalizedString('dd. MMM yyyy') . ' - ' . $date_to->toLocalizedString('dd. MMM yyyy'); ?></h1>
 
 <div class="uk-margin-medium-top">
-    <?php if ($current_user === null) { ?>
-        <div class="uk-alert-warning" uk-alert>
-            <a href class="uk-alert-close" uk-close></a>
-            <p>Kein Benutzer aktiv. <a href="<?= base_url() ?>user">Benutzer auswählen</a></p>
-        </div>
-    <?php } else { ?>
+    <?php if ($current_user === null) {
+        render_alert('warning', 'Kein Benutzer aktiv. <a href=' . base_url() . 'user">Benutzer auswählen</a>');
+    } else { ?>
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
             <div>
                 <input id="db-input-create-workday-date" class="uk-input" type="date" placeholder="Datum" aria-label="Datum" value="<?= $date_from->toLocalizedString('YYYY-MM-d') ?>">
@@ -44,12 +41,13 @@
             </div>
             <div>
                 <h2>Überzeit</h2>
+                <p>Differenz: <span><?= $overtime ?></span>h</p>
             </div>
             <div>
                 <h2>Ferien</h2>
                 <div class="uk-grid-small uk-grid-collapse" uk-grid>
                     <div class="uk-width-1-2">Restliche Ferientage im Lehrjahr: </div>
-                    <div class="uk-width-1-2"><span id="db-text-dashboard-should-workhours"><?= $vacation_remaining_credits ?></span> Tage</div>
+                    <div class="uk-width-1-2"><span><?= $vacation_remaining_credits ?></span> Tage</div>
                 </div>
             </div>
 
@@ -57,6 +55,7 @@
                 <h2>Kostenstellen und Kostenstellen-Gruppen berechnen</h2>
                 <div uk-grid>
                     <div class="uk-width-1-3">
+                        <label class="uk-form-label" for="db-input-read-costcentergroup-date-from">Von *</label>
                         <label class="uk-form-label" for="db-input-read-costcentergroup-date-from">Von *</label>
                         <div class="uk-form-controls">
                             <input required class="uk-input" name="costcentergroup-date-from" id="db-input-read-costcentergroup-date-from" type="date" value="<?= $date_from->toLocalizedString('YYYY-MM-d'); ?>">
@@ -74,7 +73,7 @@
                             <select id="db-select-read-costcentergroup" name="costcentergroup" class="db-select-read-costcentergroup uk-select" aria-label="Select">
                                 <option selected disabled value="">Auswählen</option>
                                 <?php foreach ($costcenters as $item) { ?>
-                                    <option data-type="costcenter" value="<?= $item['id'] ?>">(KS) <?= $item['name'] ?></option>
+                                    <option data-type="costcenter" value="<?= $item['id'] ?>">(KS) <?= !empty($item['costcenter_group_name']) ? '[' . $item['costcenter_group_name']  . ' ]' : '' ?> <?= $item['name'] ?></option>
                                 <?php }
 
                                 foreach ($costcentergroups as $item) { ?>

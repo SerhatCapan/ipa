@@ -14,15 +14,9 @@
                 $alert = 'warning';
                 break;
         }
-        ?>
 
-        <div class="uk-alert-<?= $alert ?>" uk-alert>
-            <a href class="uk-alert-close" uk-close></a>
-            <p><?= $return['message'] ?></p>
-        </div>
-    <?php } ?>
-
-    <div id="db-container-messages-holiday"></div>
+        render_alert($alert, $return['message']);
+    } ?>
     <form>
         <div class="uk-margin">
             <div class="uk-inline">

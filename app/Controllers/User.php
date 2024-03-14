@@ -22,7 +22,7 @@ class User extends BaseController
             $data = [
                 'current_user' => null,
                 'users' => $users,
-                'title' => 'Wähle ein Benutzer aus',
+                'title' => 'Wähle einen Benutzer',
                 'switch_user_button_title' => 'Benutzer auswählen'
             ];
 

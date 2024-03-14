@@ -52,6 +52,7 @@ class UserModel extends Model
      * @return int
      */
     public function get_overtime($user) {
+        $optionmodel = new OptionModel();
         $workhourmodel = new WorkhourModel();
         $total_workhours_row = $workhourmodel
             ->select('SUM(hours) AS total_work_hours')
@@ -65,7 +66,30 @@ class UserModel extends Model
             $total_workhours = 0;
         }
 
-        // return $total_workhours;
-        return 0;
+        $workdays = $this->get_number_of_dates_from(strtotime($user['date_from_overtime']), strtotime('now'));
+
+        // total worked hours minus the "should-have-worked" hours
+        return $total_workhours - ($workdays * $optionmodel->get_workhours_per_day());
+    }
+
+
+    /**
+     * Calculates the workdays of days between 2 dates.
+     *
+     * @param $date_from string timestamp
+     * @param $date_to string timestamp
+     * @return int
+     */
+    private function get_number_of_dates_from(string $date_from, string $date_to): int {
+        $workdays = 0;
+
+        for ($i = $date_from; $i <= $date_to; $i = strtotime("+1 day", $i)) {
+            // checks if current day is saturday or sunday
+            if (date("N", $i) < 6) {
+                $workdays++;
+            }
+        }
+
+        return $workdays;
     }
 }

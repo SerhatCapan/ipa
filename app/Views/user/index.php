@@ -14,13 +14,9 @@
                 $alert = 'warning';
                 break;
         }
-        ?>
 
-        <div class="uk-alert-<?= $alert ?>" uk-alert>
-            <a href class="uk-alert-close" uk-close></a>
-            <p><?= $return['message'] ?></p>
-        </div>
-    <?php } ?>
+        render_alert($alert, $return['message']);
+     } ?>
 
     <form action="/user/switch" method="post">
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
@@ -38,7 +34,6 @@
     </form>
 
     <?php if (!empty($current_user)) { ?>
-
     <form class="uk-margin-top" action="/user/update" method="post">
         <div class="uk-margin">
             <label class="uk-form-label" for="db-input-update-user-name">Name *</label>

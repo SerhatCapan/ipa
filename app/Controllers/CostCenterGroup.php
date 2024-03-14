@@ -55,7 +55,17 @@ class CostCenterGroup extends BaseController
         return $this->response->setJSON($return);
     }
 
-    public function read()
+    /**
+     * Calculates the amount of hours of a Costcenter-Group.
+     *
+     * Requires:
+     * - id
+     * - date_from
+     * - date_to
+     *
+     * @return ResponseInterface
+     */
+    public function read(): ResponseInterface
     {
         $id = $this->request->getPost('id');
         $id_user = $this->request->getCookie('current_user_id');

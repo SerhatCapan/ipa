@@ -65,7 +65,17 @@ class CostCenter extends BaseController
     }
 
 
-    public function read()
+    /**
+     * Calculates the amount of hours of a Costcenter.
+     *
+     * Requires:
+     * - id
+     * - date_from
+     * - date_to
+     *
+     * @return ResponseInterface
+     */
+    public function read(): ResponseInterface
     {
         $id = $this->request->getPost('id');
         $id_user = $this->request->getCookie('current_user_id');
@@ -125,6 +135,7 @@ class CostCenter extends BaseController
      */
     public function delete(): ResponseInterface
     {
+        $id = $this->request->getPost('id');
         $this->costcentermodel->delete_costcenter($id);
 
         $table = $this->costcentermodel->get_table_html();

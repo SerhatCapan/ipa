@@ -21,6 +21,17 @@ class VacationCredit extends BaseController
 
         $id_user = $this->request->getCookie('current_user_id');
 
+        if ($id_user === null) {
+            $data = [
+                'current_user' => null,
+                'table' => null
+            ];
+
+            return view('partials/header') .
+                view('/user/vacation-credit/index', $data) .
+                view('partials/footer');
+        }
+
         $table = get_table_template();
         $table->setHeading([
             'Von',
@@ -35,6 +46,7 @@ class VacationCredit extends BaseController
         }
 
         $data = [
+            'current_user' => $id_user,
             'table' => $table->generate()
         ];
 

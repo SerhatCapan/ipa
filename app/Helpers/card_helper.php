@@ -48,15 +48,28 @@ function get_html_dashboard_card($data) {
 }
 
 function get_html_dashboard_card_row($data) {
-    ob_start();
-    ?>
+
+    $costcenter_is_deleted = false;
+
+    foreach ($data['costcenters'] as $costcenter) {
+        if ($data['workhour']['id_costcenter'] === $costcenter['id'] && $costcenter['delete'] == 1) {
+            $costcenter_is_deleted = true;
+            $deleted_costcenter = $costcenter;
+        }
+    }
+
+    ob_start(); ?>
     <div class="uk-width-3-5">
-        <select data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>"  class="db-select-workhour-costcenter uk-select" aria-label="Select">
-            <option value="">Auswählen</option>
-            <?php foreach ($data['costcenters'] as $costcenter) { ?>
-                <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= esc($costcenter['name']) ?></option>
-            <?php } ?>
-        </select>
+        <?php if (!$costcenter_is_deleted) { ?>
+            <select data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>"  class="db-select-workhour-costcenter uk-select" aria-label="Select">
+                <option value="">Auswählen</option>
+                <?php foreach ($data['costcenters'] as $costcenter) { ?>
+                    <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= !empty($costcenter['costcenter_group_name']) ? '[' . $costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($costcenter['name']) ?></option>
+                <?php } ?>
+            </select>
+        <?php } else { ?>
+            <p><?= !empty($deleted_costcenter['costcenter_group_name']) ? '[' . $deleted_costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($deleted_costcenter['name']) ?></p>
+        <?php } ?>
     </div>
     <div class="uk-width-1-5">
         <span data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-workday-hour" contenteditable><?= $data['workhour']['hours'] ?></span>h

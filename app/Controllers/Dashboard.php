@@ -31,6 +31,8 @@ class Dashboard extends BaseController
     }
 
     /**
+     * Prepares all the data for the dashboard site and echoes the view
+     *
      * @throws Exception
      */
     public function index(): string
@@ -41,6 +43,7 @@ class Dashboard extends BaseController
         $date_from_format = Time::parse($date_from, 'Europe/Zurich');
         $date_to_format = Time::parse($date_to, 'Europe/Zurich');
 
+        // If no user is selected, don't show anything
         if ($id_user === null) {
             $data = [
                 'workdays' => null,
@@ -65,7 +68,7 @@ class Dashboard extends BaseController
 
         $data = [
             'workdays' => $workdays,
-            'costcenters' => $this->costcentermodel->findAll(),
+            'costcenters' => $this->costcentermodel->get_costcenters(),
             'costcentergroups' => $this->costcentergroupmodel->findAll(),
             'current_user' => $user,
             'calendar' => $calendar,
@@ -84,7 +87,6 @@ class Dashboard extends BaseController
     private function get_calendar($selected_date_from, $selected_date_to)
     {
         $vacationmodel = new VacationModel();
-
 
         $calendar = [];
         $startday = strtotime('last Monday', strtotime($selected_date_from));

@@ -40,7 +40,21 @@ class WorkhourModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function get_as_workdays($data) {
+    /**
+     * Gets an Array with all the workdays.
+     *
+     * $data can include:
+     * - id (Only gets where id is equal)
+     * - id_user (Only gets where id_user is equal
+     * - date (Only gets where date is equal
+     * - date_from (Only gets date is greater than or equal date_from)
+     * - date_to (Only gets date is smaller than or equal date_to)
+     *
+     * @param $data
+     * @return array
+     */
+    public function get_as_workdays($data): array
+    {
         $this
             ->select('ipa_workhour.id, ipa_workhour.hours, ipa_workhour.date, ipa_costcenter.description, ipa_costcenter.id AS id_costcenter , ipa_costcenter.name')
             ->join('ipa_costcenter', 'ipa_costcenter.id = ipa_workhour.id_costcenter', 'left');
