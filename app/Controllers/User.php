@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use ReflectionException;
 
 class User extends BaseController
@@ -18,11 +19,11 @@ class User extends BaseController
         $user_id = $this->request->getCookie('current_user_id');
         $users = $this->usermodel->findAll();
 
-        if ($user_id === null) {
+        if (!$this->usermodel->user_exist($user_id )) {
             $data = [
                 'current_user' => null,
                 'users' => $users,
-                'title' => 'Wähle einen Benutzer',
+                'title' => 'Benutzer',
                 'switch_user_button_title' => 'Benutzer auswählen'
             ];
 
@@ -46,20 +47,41 @@ class User extends BaseController
     }
 
     /**
-     * @return void
      * @throws ReflectionException
      */
     public function create()
     {
-        $user = $this->usermodel->where('name', '')->first();
+        $name = $this->request->getPost('name');
+        $user = $this->usermodel->where('name', $name)->first();
+        $session = session();
 
-        if ($user === null) {
-            $this->usermodel->insert([
-                'name' => $this->request->getPost('name')
-            ]);
+        if (!empty($user)) {
+            $flashdata = [
+                'return' => [
+                    'success' => false,
+                    'message' => 'Benutzer mit dem Namen existiert schon'
+                ]
+            ];
 
-            $user = $this->usermodel->find($this->usermodel->getInsertID());
+            $session->setFlashdata($flashdata);
+            return redirect()->to('user');
         }
+
+        $this->usermodel->insert([
+            'name' => $this->request->getPost('name')
+        ]);
+
+
+        $flashdata = [
+            'return' => [
+                'success' => true,
+                'message' => 'Benutzer wurde erstellt'
+            ]
+        ];
+
+        $session->setFlashdata($flashdata);
+        return redirect()->to('user');
+
     }
 
     /**
@@ -107,24 +129,42 @@ class User extends BaseController
         return redirect()->to('user');
     }
 
-    /**
-     * @return void
-     */
     public function delete()
     {
-        $id = $this->request->getPost('id');
+        $id = $this->request->getPost('user');
+        $id_user_cookie = $this->request->getCookie('current_user_id');
+        $session = session();
+
         $this->usermodel->delete($id);
+        $session = session();
+
+        $flashdata = [
+            'return' => [
+                'success' => true,
+                'message' => 'Benutzer wurde gelöscht',
+            ]
+        ];
+
+        if ($id === $id_user_cookie) {
+            $session->destroy();
+        }
+
+        $session->setFlashdata($flashdata);
+        return redirect()->to('user');
     }
+
 
     /**
      * Switches the user and redirects to the user page
      *
-     * @return void
+     * Requires:
+     * - id
+     *
+     * @return RedirectResponse
      */
     public function switch() {
         $id = $this->request->getPost('user');
         setcookie('current_user_id', $id, strtotime('+365 days'), '/');
-        // redirect didn't work with redirect() form codeigniter
-        header("Location: " . base_url() . 'user');
+        return redirect()->to('user');
     }
 }

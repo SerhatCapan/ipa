@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\UserModel;
 use App\Models\VacationCreditModel;
 use App\Models\VacationModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -11,18 +12,20 @@ class Vacation extends BaseController
 {
     private $vacationmodel;
     private $vacationcreditmodel;
+    private $usermodel;
 
     public function __construct()
     {
         $this->vacationmodel = new VacationModel();
         $this->vacationcreditmodel = new VacationCreditModel();
+        $this->usermodel = new UserModel();
     }
 
     public function index()
     {
         $id_user = $this->request->getCookie('current_user_id');
 
-        if ($id_user === null) {
+        if (!$this->usermodel->user_exist($id_user)) {
             $data = [
                 'current_user' => null,
                 'vacation_credit_date_from' => null,

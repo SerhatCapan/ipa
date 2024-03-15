@@ -3,7 +3,7 @@
 
 <div class="uk-margin-medium-top">
     <?php if ($current_user === null) {
-        render_alert('warning', 'Kein Benutzer aktiv. <a href=' . base_url() . 'user">Benutzer auswählen</a>');
+        render_alert('warning', 'Kein Benutzer aktiv. <a href="' . base_url() . 'user">Benutzer auswählen</a>');
     } else { ?>
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
             <div>

@@ -28,11 +28,9 @@ $sidebar = [
     [
         "label" => 'Benutzer',
         "icon"  => "user",
+        "page"  => "/user",
+
         'nav-sub' => [
-            [
-                "label" => 'Allgemein',
-                "page"  => "/user"
-            ],
             [
                 "label" => 'Ferien',
                 "page"  => "/user/vacation",
@@ -58,7 +56,7 @@ $sidebar = [
             
             if (!empty($nav_sub)) { ?>
                 <li class="uk-parent">
-                    <a href="">
+                    <a href="<?= $menu['page'] ?>">
                         <span class="uk-margin-small-right" uk-icon="<?= $menu['icon'] ?? '' ?>"></span><?= $menu['label'] ?>
                     </a>
                     <ul class="uk-nav-sub">

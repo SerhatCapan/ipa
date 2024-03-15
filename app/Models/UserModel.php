@@ -42,6 +42,14 @@ class UserModel extends Model
     protected $afterDelete    = [];
 
 
+    public function user_exist($id) {
+        if ($id === null) {
+            return false;
+        }
+
+        return !empty($this->find($id));
+    }
+
     /**
      * TODO: needs to look on these things:
      * - Holidays

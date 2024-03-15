@@ -2,7 +2,7 @@
 <h1 class="uk-margin-remove-top">Ferienguthaben</h1>
 <div class="uk-margin-medium-top">
     <?php if ($current_user === null) {
-        render_alert('warning', 'Kein Benutzer aktiv. <a href=' . base_url() . 'user">Benutzer auswählen</a>');
+        render_alert('warning', 'Kein Benutzer aktiv. <a href="' . base_url() . 'user">Benutzer auswählen</a>');
     } else { ?>
         <form action="/user/vacation-credit/create" method="post">
             <div class="uk-margin">

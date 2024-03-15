@@ -51,6 +51,14 @@ class VacationModel extends Model
         $vacationcreditmodel = new VacationCreditModel();
         $vacation_credit = $vacationcreditmodel->get_vacation_credit_from_date($current_date);
 
+        if (empty($vacation_credit)) {
+            return [
+                'vacation' => '',
+                'vacation_credit' => '',
+                'vacation_remaining_credits' => ''
+            ];
+        }
+
         $vacation = $this
             ->select()
             ->where("date BETWEEN '" . $vacation_credit['date_from'] . "' AND '" . $vacation_credit['date_to'] . "'")

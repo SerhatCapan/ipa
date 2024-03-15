@@ -45,7 +45,6 @@ class VacationCreditModel extends Model
      * Gets the vacation credit of the given date.
      *
      * @param string $date
-     * @return array
      */
     function get_vacation_credit_from_date(string $date) {
         $vacation_credit = $this
@@ -54,6 +53,6 @@ class VacationCreditModel extends Model
             ->where('date_to >=', $date)
             ->get()->getResultArray();
 
-        return $vacation_credit[0];
+        return $vacation_credit[0] ?? [];
     }
 }

@@ -2,7 +2,7 @@
 <h1 class="uk-margin-remove-top">Ferien</h1>
 <div class="uk-margin-medium-top">
     <?php if ($current_user === null) {
-        render_alert('warning', 'Kein Benutzer aktiv. <a href=' . base_url() . 'user">Benutzer auswählen</a>');
+        render_alert('warning', 'Kein Benutzer aktiv. <a href="' . base_url() . 'user">Benutzer auswählen</a>');
     } else { ?>
         <p>Restliche Ferienguthaben vom <?= $vacation_credit_date_from ?> - <?= $vacation_credit_date_to ?>: <?= $vacation_remaining_credits ?> Tage</p>
         <form method="post" action="/user/vacation/create">

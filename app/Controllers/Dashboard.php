@@ -46,7 +46,7 @@ class Dashboard extends BaseController
         $date_to_format = Time::parse($date_to, 'Europe/Zurich');
 
         // If no user is selected, don't show anything
-        if ($id_user === null) {
+        if (!$this->usermodel->user_exist($id_user)) {
             $data = [
                 'workdays' => null,
                 'costcenters' => null,
