@@ -12228,12 +12228,12 @@ iframe.uk-cover {
   background-color: #06D6A0;
 }
 .db-calendar .db-calendar-day-vacation {
-  background-color: red !important;
+  background-color: #A98CFF !important;
 }
 .db-calendar .db-calendar-day-absence {
-  background-color: green !important;
+  background-color: #D39700 !important;
 }
 .db-calendar .db-calendar-day-holiday {
-  background-color: blue !important;
+  background-color: #148AED !important;
 }
 /*# sourceMappingURL=style.css.map */

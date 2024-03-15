@@ -68,7 +68,7 @@ function get_html_dashboard_card_row($data) {
                 <?php } ?>
             </select>
         <?php } else { ?>
-            <p><?= !empty($deleted_costcenter['costcenter_group_name']) ? '[' . $deleted_costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($deleted_costcenter['name']) ?></p>
+            <p data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-select-workhour-costcenter"><?= !empty($deleted_costcenter['costcenter_group_name']) ? '[' . $deleted_costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($deleted_costcenter['name']) ?></p>
         <?php } ?>
     </div>
     <div class="uk-width-1-5">

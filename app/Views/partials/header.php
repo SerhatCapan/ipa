@@ -22,6 +22,7 @@
     <script type="text/javascript" src="<?=base_url()?>js/dashboard.js"></script>
     <script type="text/javascript" src="<?=base_url()?>js/vacation.js"></script>
     <script type="text/javascript" src="<?=base_url()?>js/absence.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>js/holiday.js"></script>
 </head>
 <body>
 <?php

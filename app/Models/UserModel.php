@@ -54,22 +54,38 @@ class UserModel extends Model
     public function get_overtime($user) {
         $optionmodel = new OptionModel();
         $workhourmodel = new WorkhourModel();
-        $total_workhours_row = $workhourmodel
-            ->select('SUM(hours) AS total_work_hours')
+        $holidaymodel = new HolidayModel();
+        $vacationmodel = new VacationModel();
+        $absencemodel = new AbsenceModel();
+
+        // get the sum of hours of all models
+        $total_workhours = $workhourmodel
+            ->select('SUM(hours) AS total_hours')
             ->where('id_user =', $user['id'])
             ->where('date >=', $user['date_from_overtime'])
-            ->get()->getResultArray();
+            ->get()->getResultArray()[0]['total_hours'] ?? 0;
 
-        if (!empty($total_workhours_row)) {
-            $total_workhours = $total_workhours_row[0]['total_work_hours'];
-        } else {
-            $total_workhours = 0;
-        }
+        $total_holidays_hours = $holidaymodel
+            ->select('SUM(hours) AS total_hours')
+            ->where('date >=', $user['date_from_overtime'])
+            ->get()->getResultArray()[0]['total_hours'] ?? 0;
 
-        $workdays = $this->get_number_of_dates_from(strtotime($user['date_from_overtime']), strtotime('now'));
+        $total_absence_hours = $absencemodel
+            ->select('SUM(hours) AS total_hours')
+            ->where('date >=', $user['date_from_overtime'])
+            ->get()->getResultArray()[0]['total_hours'] ?? 0;
 
-        // total worked hours minus the "should-have-worked" hours
-        return $total_workhours - ($workdays * $optionmodel->get_workhours_per_day());
+        $total_vacation_hours = $vacationmodel
+            ->select('SUM(hours) AS total_hours')
+            ->where('date >=', $user['date_from_overtime'])
+            ->get()->getResultArray()[0]['total_hours'] ?? 0;
+
+
+        $number_of_days_without_weekend = $this->get_number_of_days_without_weekend(strtotime($user['date_from_overtime']), strtotime('now'));
+        $should_workhours = ($number_of_days_without_weekend * $optionmodel->get_workhours_per_day()) - $total_holidays_hours - $total_absence_hours - $total_vacation_hours;
+
+        // total worked hours minus the "should-work" hours
+        return $total_workhours - $should_workhours;
     }
 
 
@@ -80,7 +96,7 @@ class UserModel extends Model
      * @param $date_to string timestamp
      * @return int
      */
-    private function get_number_of_dates_from(string $date_from, string $date_to): int {
+    private function get_number_of_days_without_weekend(string $date_from, string $date_to): int {
         $workdays = 0;
 
         for ($i = $date_from; $i <= $date_to; $i = strtotime("+1 day", $i)) {

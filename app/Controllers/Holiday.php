@@ -67,4 +67,17 @@ class Holiday extends BaseController
         $session->setFlashdata($flashdata);
         return redirect()->to('/holiday');
     }
+
+    public function delete() {
+        $id = $this->request->getPost('id');
+        $this->holidaymodel->delete($id);
+
+        $return = [
+            'success' => true,
+            'message' => 'Feiertag wurde gelöscht',
+            'html' => $this->holidaymodel->get_table_html()
+        ];
+
+        return $this->response->setJSON($return);
+    }
 }

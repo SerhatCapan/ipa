@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\AbsenceModel;
 use App\Models\CostCenterGroupModel;
 use App\Models\CostCenterModel;
+use App\Models\HolidayModel;
 use App\Models\OptionModel;
 use App\Models\UserModel;
 use App\Models\VacationModel;
@@ -87,6 +89,8 @@ class Dashboard extends BaseController
     private function get_calendar($selected_date_from, $selected_date_to)
     {
         $vacationmodel = new VacationModel();
+        $absencemodel = new AbsenceModel();
+        $holidaymodel = new HolidayModel();
 
         $calendar = [];
         $startday = strtotime('last Monday', strtotime($selected_date_from));
@@ -102,14 +106,31 @@ class Dashboard extends BaseController
                 $type = 'workday';
                 $tooltip = "";
 
-                $vacation_day = $vacationmodel
-                    ->select()
-                    ->where('date', $date)
-                    ->get()->getResultArray();
+                $models = [
+                    'vacation' => $vacationmodel,
+                    'absence' => $absencemodel,
+                    'holiday' => $holidaymodel
+                ];
 
-                if (!empty($vacation_day)) {
-                    $type = "vacation";
-                    $tooltip = "Ferien - " . $vacation_day[0]['hours'] . "h";
+                foreach ($models as $key => $model) {
+                    $data = $model
+                        ->select()
+                        ->where('date', $date)
+                        ->get()->getResultArray();
+
+                    if (!empty($data)) {
+                        $type = $key;
+
+                        if ($key == 'vacation') {
+                            $tooltip = "Ferien - " . $data[0]['hours'] . "h";
+
+                        } elseif ($key == 'absence') {
+                            $tooltip = esc($data[0]['reason']) . " - " . $data[0]['hours'] . "h";
+
+                        } elseif ($key == 'holiday') {
+                            $tooltip = esc($data[0]['name']) . " - " . $data[0]['hours'] . "h";
+                        }
+                    }
                 }
 
                 $week_days[] = [
