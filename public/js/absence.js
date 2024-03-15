@@ -1,13 +1,13 @@
 $(document).ready(function() {
     let container_table_absence = $('#db-container-table-absence');
 
-    $(document).on('click', '.db-icon-delete-vacation', function(event) {
+    $(document).on('click', '.db-icon-delete-absence', function(event) {
         event.preventDefault();
 
-        let id = $(this).data('id-vacation');
+        let id = $(this).data('id-absence');
 
         $.ajax({
-            url: "/user/vacation/delete",
+            url: "/user/absence/delete",
             method: "post",
             headers: {'X-Requested-With': 'XMLHttpRequest'},
             data: {
@@ -21,5 +21,4 @@ $(document).ready(function() {
             },
         });
     })
-
 });

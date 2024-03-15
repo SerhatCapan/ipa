@@ -16,6 +16,11 @@ $sidebar = [
         "icon"  => "list",
     ],
     [
+        "label" => 'Feiertage',
+        "page"  => "/holiday",
+        "icon"  => "list",
+    ],
+    [
         "label" => 'Einstellungen',
         "page"  => "/settings",
         "icon"  => "list",

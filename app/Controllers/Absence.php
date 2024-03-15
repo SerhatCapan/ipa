@@ -32,7 +32,8 @@ class Absence extends BaseController
         }
 
         $data = [
-            'current_user' => $id_user
+            'current_user' => $id_user,
+            'table' => $this->absence->get_table_html($id_user)
         ];
 
         return view('partials/header') .
@@ -48,13 +49,13 @@ class Absence extends BaseController
      * - absence-date
      * - absence-reason
      *
-     * @return ResponseInterface
      * @throws \ReflectionException
      */
-    public function create(): ResponseInterface {
+    public function create() {
         $id_user = $this->request->getCookie('current_user_id');
-        $date = $this->request->getCookie('absence-date');
-        $reason = $this->request->getCookie('absence-reason');
+        $date = $this->request->getPost('absence-date');
+        $reason = $this->request->getPost('absence-reason');
+        $hours = $this->request->getPost('absence-hours');
 
         $absence_exist = $this->absence
             ->select()
@@ -63,29 +64,37 @@ class Absence extends BaseController
             ->get()->getResultArray();
 
         if (!empty($absence_exist)) {
-            $return = [
-                'success' => false,
-                'message' => 'Absenz konnte nicht erstellt werden da eine Absenz am gleichen Tag schon existiert'
+            $flashdata = [
+                'return' => [
+                    'success' => false,
+                    'message' => 'Absenz konnte nicht erstellt werden da eine Absenz am gleichen Tag schon existiert'
+                ]
             ];
 
-            return $this->response->setJSON($return);
+            $session = session();
+            $session->setFlashdata($flashdata);
+            return redirect()->to('user/absence');
         }
 
         $data = [
             'id_user' => $id_user,
             'date' => $date,
-            'reason' => $reason
+            'reason' => $reason,
+            'hours' => $hours
         ];
 
         $this->absence->insert($data);
 
-        $return = [
-            'success' => true,
-            'message' => 'Absenz wurde erstellt',
-            'html' => $this->absence->get_table_html($id_user)
+        $flashdata = [
+            'return' => [
+                'success' => true,
+                'message' => 'Absenzen wurden erstellt'
+            ]
         ];
 
-        return $this->response->setJSON($return);
+        $session = session();
+        $session->setFlashdata($flashdata);
+        return redirect()->to('user/absence');
     }
 
 
@@ -95,22 +104,24 @@ class Absence extends BaseController
      * Requires:
      * - id
      * - absence-date
+     * - hours
      *
      * @return ResponseInterface
      * @throws \ReflectionException
      */
     public function update(): ResponseInterface {
         $id = $this->request->getPost('id');
+        $id_user = $this->request->getCookie('current_user_id');
         $reason = $this->request->getPost('reason');
 
-        $this->absence->set('reason', $reason)->update($id);
+        $this->absence
+            ->set('reason', $reason)
+            ->update($id);
 
         $return = [
             'success' => true,
             'message' => 'Absenz wurde aktualisiert',
-        ];
-
-        
+         ];
 
         return $this->response->setJSON($return);
     }

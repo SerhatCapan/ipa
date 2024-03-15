@@ -71,6 +71,15 @@ $routes->post('/user/absence/update', 'Absence::update');
 $routes->post('/user/absence/delete', 'Absence::delete');
 
 /**
+ * Holiday
+ */
+$routes->get('/holiday', 'Holiday::index');
+$routes->post('/holiday/create', 'Holiday::create');
+$routes->post('/holiday/update', 'Holiday::update');
+$routes->post('/holiday/read', 'Holiday::read');
+$routes->post('/holiday/delete', 'Holiday::delete');
+
+/**
  * Settings
  */
 $routes->get('/settings', 'Settings::index');
