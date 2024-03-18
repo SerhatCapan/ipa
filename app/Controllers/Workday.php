@@ -12,8 +12,8 @@ use ReflectionException;
 
 class Workday extends BaseController
 {
-    private $workhourmodel;
-    private $costcentermodel;
+    private WorkhourModel $workhourmodel;
+    private CostCenterModel $costcentermodel;
     private UserModel $usermodel;
 
     public function __construct()
@@ -24,10 +24,15 @@ class Workday extends BaseController
     }
 
     /**
+     * Creates a new workday
+     *
+     * Requires:
+     * - date (date of the workday)
+     *
      * @throws ReflectionException
      * @throws Exception
      */
-    public function create()
+    public function create(): ResponseInterface
     {
         $user_id = $this->request->getCookie('current_user_id');
         $user = $this->usermodel->find($user_id);
@@ -47,7 +52,6 @@ class Workday extends BaseController
             return $this->response->setJSON($return);
         }
 
-
         $data = [
             'id_user' => $user['id'],
             'date' => $date
@@ -66,14 +70,5 @@ class Workday extends BaseController
         ];
 
         return $this->response->setJSON($return);
-    }
-
-    public function read() {
-
-    }
-
-    public function delete()
-    {
-
     }
 }

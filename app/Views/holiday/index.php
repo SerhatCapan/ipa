@@ -17,41 +17,16 @@
 
         render_alert($alert, $return['message']);
     } ?>
-    <form method="post" action="/holiday/create">
-        <fieldset class="uk-fieldset">
-            <legend class="uk-legend">Feiertäge setzen</legend>
-            <div class="uk-margin">
-                <div>
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="db-input-create-holiday-date">Tag</label>
-                        <div class="uk-form-controls">
-                            <input required class="uk-input" id="db-input-create-holiday-date" value="<?= date('Y-m-d', strtotime('now')) ?>" name="holiday-date" type="date">
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="db-input-create-holiday-hours">Stunden *</label>
-                        <div class="uk-form-controls">
-                            <input required class="uk-input" id="db-input-create-holiday-hours" max="24" name="holiday-hours" type="number">
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <label class="uk-form-label" for="db-input-create-holiday-name">Feiertag Name *</label>
-                        <div class="uk-form-controls">
-                            <input required class="uk-input" id="db-input-create-holiday-name" name="holiday-name" type="text">
-                        </div>
-                    </div>
-                    <div class="uk-margin">
-                        <div class="uk-form-controls">
-                            <input type="submit" class="uk-button uk-button-primary" value="Feiertag erfassen">
-                        </div>
-                    </div>
-                </div>
+    <form>
+        <div class="uk-margin">
+            <div class="uk-inline">
+                <a id="db-button-create-holiday" class="uk-form-icon uk-form-icon-flip" uk-icon="icon: plus"></a>
+                <input id="db-input-create-holiday" class="uk-input" type="text" placeholder="Feiertage erstellen" aria-label="Clickable icon">
             </div>
-        </fieldset>
+        </div>
     </form>
 
-
-    <div id="db-container-table-holiday">
+    <div id="container_table_holiday">
         <?php
         echo $table;
         ?>

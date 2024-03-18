@@ -5,6 +5,10 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+/*
+ * Dashboard
+ */
 $routes->get('/', 'Dashboard::index');
 $routes->get('/dashboard', 'Dashboard::index');
 $routes->get('/home', 'Dashboard::index');
@@ -25,7 +29,6 @@ $routes->post('/workhour/delete', 'Workhour::delete');
  * Costcenter
  */
 $routes->get('/costcenter', 'CostCenter::index');
-$routes->get('/costcenter/(:any)', 'CostCenter::index');
 $routes->post('/costcenter/create', 'CostCenter::create');
 $routes->post('/costcenter/update', 'CostCenter::update');
 $routes->post('/costcenter/read', 'CostCenter::read');

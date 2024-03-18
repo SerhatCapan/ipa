@@ -72,7 +72,13 @@ class CostCenterModel extends Model
         }
     }
 
-    public function get_costcenters($with_deleted = false) {
+    /**
+     * Gets the costcenters.
+     *
+     * @param bool $with_deleted
+     * @return mixed
+     */
+    public function get_costcenters(bool $with_deleted = false): array {
         $this
             ->select('ipa_costcenter.name, ipa_costcenter_group.name AS costcenter_group_name, ipa_costcenter.id, ipa_costcenter.delete')
             ->join('ipa_costcenter_group', 'ipa_costcenter_group.id = ipa_costcenter.id_costcenter_group', 'left');
@@ -84,7 +90,13 @@ class CostCenterModel extends Model
             return $this->get()->getResultArray();
     }
 
-    public function get_table_html() {
+    /**
+     * Returns table HTML of the costcenters
+     *
+     * @return string
+     */
+    public function get_table_html(): string
+    {
         $costcentergroupmodel = new CostCenterGroupModel();
         $table = get_table_template();
         $table->setHeading('Name', 'Kostenstellen-Gruppe', '');
@@ -133,8 +145,9 @@ class CostCenterModel extends Model
      *
      * @param $id
      * @return void
+     * @throws ReflectionException
      */
-    public function delete_costcenter($id) {
+    public function delete_costcenter($id): void {
         $workhourmodel = new WorkhourModel();
         $workhours = $workhourmodel
             ->select()

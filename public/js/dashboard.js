@@ -7,9 +7,6 @@ $(document).ready(function() {
     let select_read_costcentergroup = $('#db-select-read-costcentergroup');
     let costcentergroup_total_hours_in_time_period = $('#db-costcentergroup-total-hours-in-time-period')
 
-    // ---------------------------------------
-    // Dynamic Elements
-    // ---------------------------------------
     $(document).on('click', '.db-icon-add-costcenter', function(event) {
         event.preventDefault();
 
@@ -136,9 +133,7 @@ $(document).ready(function() {
         });
     });
 
-    // ---------------------------------------
-    // Non-Dynamic Elements
-    // ---------------------------------------
+
     button_create_workday.on('click', function () {
         $.ajax({
             url: "/workday/create",
@@ -167,9 +162,6 @@ $(document).ready(function() {
         set_costcentergroup_total_workhours();
     });
 
-    // ---------------------------------------
-    // Functions
-    // ---------------------------------------
     function set_costcentergroup_total_workhours() {
        let type = select_read_costcentergroup.find(":selected").data('type')
 

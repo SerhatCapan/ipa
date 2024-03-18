@@ -45,6 +45,7 @@ class VacationCreditModel extends Model
      * Gets the vacation credit of the given date.
      *
      * @param string $date
+     * @return array|mixed
      */
     function get_vacation_credit_from_date(string $date) {
         $vacation_credit = $this

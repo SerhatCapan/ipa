@@ -5,18 +5,24 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\AbsenceModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use ReflectionException;
 
 class Absence extends BaseController
 {
 
-    private $absence;
+    private AbsenceModel $absence;
 
     public function __construct()
     {
         $this->absence = new AbsenceModel();
     }
 
-    public function index()
+    /**
+     * Index of the absence page
+     *
+     * @return string
+     */
+    public function index(): string
     {
         $id_user = $this->request->getCookie('current_user_id');
 
@@ -49,7 +55,7 @@ class Absence extends BaseController
      * - absence-date
      * - absence-reason
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function create() {
         $id_user = $this->request->getCookie('current_user_id');
@@ -107,7 +113,7 @@ class Absence extends BaseController
      * - hours
      *
      * @return ResponseInterface
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function update(): ResponseInterface {
         $id = $this->request->getPost('id');

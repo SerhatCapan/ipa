@@ -4,7 +4,9 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\OptionModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
+use ReflectionException;
 
 class Settings extends BaseController
 {
@@ -16,7 +18,12 @@ class Settings extends BaseController
         $this->optionmodel = new OptionModel();
     }
 
-    public function index()
+    /**
+     * Index of the settings page
+     *
+     * @return string
+     */
+    public function index(): string
     {
 
         $workhours_per_day = $this->optionmodel
@@ -33,7 +40,17 @@ class Settings extends BaseController
             view('partials/footer');
     }
 
-    public function update() {
+    /**
+     * Updates the settings
+     *
+     * Requires:
+     * - option-workhours-per-day
+     *
+     * @return RedirectResponse
+     * @throws ReflectionException
+     */
+    public function update(): RedirectResponse
+    {
         $workhours_per_day = $this->request->getPost('option-workhours-per-day');
 
         $this->optionmodel

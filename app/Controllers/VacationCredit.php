@@ -5,12 +5,14 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
 use App\Models\VacationCreditModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
+use ReflectionException;
 
 class VacationCredit extends BaseController
 {
 
-    private  VacationCreditModel $vacationcreditmodel;
+    private VacationCreditModel $vacationcreditmodel;
     private UserModel $usermodel;
 
     public function __construct()
@@ -19,9 +21,13 @@ class VacationCredit extends BaseController
         $this->vacationcreditmodel = new VacationCreditModel();
     }
 
-    public function index()
+    /**
+     * Index of the vacation credit page
+     *
+     * @return string
+     */
+    public function index(): string
     {
-
         $id_user = $this->request->getCookie('current_user_id');
 
         if (!$this->usermodel->user_exist($id_user)) {
@@ -58,7 +64,19 @@ class VacationCredit extends BaseController
             view('partials/footer');
     }
 
-    public function create() {
+    /**
+     * Creates a new vacation credit
+     *
+     * Requires:
+     * - vacation-credit-date-from
+     * - vacation-credit-date-to
+     * - vacation-credit-credit
+     *
+     * @return RedirectResponse
+     * @throws ReflectionException
+     */
+    public function create(): RedirectResponse
+    {
         $id_user = $this->request->getCookie('current_user_id');
 
         if ($id_user === null) {
@@ -88,17 +106,5 @@ class VacationCredit extends BaseController
         $session = session();
         $session->setFlashdata($flashdata);
         return redirect()->to('/user/vacation-credit');
-    }
-
-    public function read() {
-
-    }
-
-    public function update() {
-
-    }
-
-    public function delete() {
-
     }
 }

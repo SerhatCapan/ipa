@@ -47,7 +47,8 @@ class VacationModel extends Model
      * @param $current_date
      * @return array
      */
-    public function get_vacation($current_date) {
+    public function get_vacation($current_date): array
+    {
         $vacationcreditmodel = new VacationCreditModel();
         $vacation_credit = $vacationcreditmodel->get_vacation_credit_from_date($current_date);
 
@@ -64,9 +65,9 @@ class VacationModel extends Model
             ->where("date BETWEEN '" . $vacation_credit['date_from'] . "' AND '" . $vacation_credit['date_to'] . "'")
             ->get()->getResultArray();
 
-        // 'vacation':                      Alle Ferientage einzeln in einem Array
-        // 'vacation_credit':               Beinhaltet den Datensatz mit den Anzahl der gesetzten Ferienguthaben in dem Zwischenraum
-        // 'vacation_remaining_credits':    Die restlichen jetzigen noch verfügbaren Ferienguthaben
+        // 'vacation': Alle Ferientage einzeln in einem Array
+        // 'vacation_credit': Beinhaltet den Datensatz mit den Anzahl der gesetzten Ferienguthaben in dem Zwischenraum
+        // 'vacation_remaining_credits': Die restlichen jetzigen noch verfügbaren Ferienguthaben
         return [
             'vacation' => $vacation,
             'vacation_credit' => $vacation_credit,
@@ -75,7 +76,13 @@ class VacationModel extends Model
     }
 
 
-    public function get_table_html() {
+    /**
+     * Gets table HTML of vacation
+     *
+     * @return string
+     */
+    public function get_table_html(): string
+    {
         $vacation = $this->get_vacation(date('Y-m-d', strtotime('now')));
         $table = get_table_template();
         $table->setHeading([

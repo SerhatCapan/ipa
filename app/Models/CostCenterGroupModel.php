@@ -42,7 +42,13 @@ class CostCenterGroupModel extends Model
     protected $afterDelete    = [];
 
 
-    public function get_table_html() {
+    /**
+     * Gets the table HTML
+     *
+     * @return string
+     */
+    public function get_table_html(): string
+    {
         $table = get_table_template();
         $table->setHeading('Name', '');
         $costcentermodel = new CostCenterModel();

@@ -13,7 +13,7 @@ class Workhour extends BaseController
 {
     private WorkhourModel $workhourmodel;
     private CostCenterModel $costcentermodel;
-    private $usermodel;
+    private UserModel $usermodel;
 
     public function __construct()
     {
@@ -23,9 +23,12 @@ class Workhour extends BaseController
     }
 
     /**
+     * Creates a new workhour
+     *
+     * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function create()
+    public function create(): ResponseInterface
     {
         $date = $this->request->getPost('date');
         $user_id = $this->request->getCookie('current_user_id');
@@ -48,15 +51,20 @@ class Workhour extends BaseController
         return $this->response->setJSON($return);
     }
 
-    public function read($id)
-    {
-
-    }
-
     /**
+     * Updates workhour
+     *
+     * Requires:
+     * - id
+     *
+     * Optional:
+     * - id_costcenter
+     * - hours
+     *
+     * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function update()
+    public function update(): ResponseInterface
     {
         $id = $this->request->getPost('id');
         $id_costcenter = $this->request->getPost('id_costcenter');
@@ -80,7 +88,16 @@ class Workhour extends BaseController
         return $this->response->setJSON($return);
     }
 
-    public function delete()
+
+    /**
+     * Deletes workhour
+     *
+     * Requires:
+     * - id
+     *
+     * @return ResponseInterface
+     */
+    public function delete(): ResponseInterface
     {
         $id = $this->request->getPost('id');
         $this->workhourmodel->delete($id);
@@ -90,6 +107,6 @@ class Workhour extends BaseController
             'message' => 'Arbeitsstunde wurde gelöscht',
         ];
 
-        return $return;
+        return $this->response->setJSON($return);
     }
 }

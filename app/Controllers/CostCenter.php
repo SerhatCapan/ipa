@@ -11,7 +11,7 @@ use ReflectionException;
 class CostCenter extends BaseController
 {
     private CostCenterModel $costcentermodel;
-    private $workhourmodel;
+    private WorkhourModel $workhourmodel;
 
     public function __construct()
     {

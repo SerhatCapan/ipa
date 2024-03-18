@@ -86,8 +86,14 @@ class Dashboard extends BaseController
     }
 
 
-    private function get_calendar($selected_date_from, $selected_date_to)
-    {
+    /**
+     * Gets the calendar array for the dashboard
+     *
+     * @param $selected_date_from
+     * @param $selected_date_to
+     * @return array
+     */
+    private function get_calendar($selected_date_from, $selected_date_to): array {
         $vacationmodel = new VacationModel();
         $absencemodel = new AbsenceModel();
         $holidaymodel = new HolidayModel();

@@ -12199,9 +12199,6 @@ iframe.uk-cover {
 .db-sidebar .db-nav-active a {
   color: #F8FFE5;
 }
-[contenteditable]:focus {
-  outline: none;
-}
 .db-container {
   margin-left: 320px;
   width: 80%;
@@ -12222,18 +12219,29 @@ iframe.uk-cover {
   cursor: pointer;
 }
 .db-calendar td {
+  color: #666 !important;
   background-color: #abfde8;
 }
-.db-calendar .db-calendar-week-selected td {
-  background-color: #06D6A0;
+.db-calendar .db-week-selected td {
+  background-color: #06D6A0 !important;
 }
-.db-calendar .db-calendar-day-vacation {
+.db-week-selected {
+  background-color: #06D6A0 !important;
+}
+.db-day-workday {
+  color: #666 !important;
+  background-color: #abfde8;
+}
+.db-day-vacation {
   background-color: #A98CFF !important;
 }
-.db-calendar .db-calendar-day-absence {
+.db-day-absence {
   background-color: #D39700 !important;
 }
-.db-calendar .db-calendar-day-holiday {
+.db-day-holiday {
   background-color: #148AED !important;
+}
+[contenteditable]:focus {
+  outline: none;
 }
 /*# sourceMappingURL=style.css.map */

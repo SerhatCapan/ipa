@@ -3,6 +3,10 @@
 @color-white: #F8FFE5;
 @color-black: black;
 @color-green: #06D6A0;
+@color-green-light: lighten(@color-green, 40%);
+@color-violet: #A98CFF;
+@color-orange: #D39700;
+@color-blue: #148AED;
 
 @base-selection-background: @color-green;
 @base-link-color: @color-green;
@@ -12,6 +16,7 @@
 @nav-default-font-size: 1rem;
 
 @section-padding-vertical-m: 40px;
+
 @table-cell-padding-vertical: 10px;
 @table-cell-padding-horizontal: 10px;
 
@@ -19,51 +24,10 @@
 @card-body-padding-vertical-l: 15px;
 
 @import "partials/sidebar.less";
+@import "partials/container.less";
+@import "partials/calendar.less";
 
+// removes ugly focus border of contenteditable HTML elements
 [contenteditable]:focus {
   outline: none;
-}
-
-.db-container {
-  margin-left: 320px;
-  width: 80%;
-}
-
-.db-calendar {
-  text-align: center;
-
-  th, tr {
-    width: 50px;
-    height: 50px;
-    aspect-ratio: 1 / 1 ;
-  }
-
-  th {
-    background-color: gold;
-  };
-
-  tbody tr {
-    cursor: pointer;
-  }
-
-  td {
-    background-color: lighten(@color-green, 40%);
-  }
-
-  .db-calendar-week-selected td {
-    background-color: @color-green;
-  }
-
-  .db-calendar-day-vacation {
-    background-color: #A98CFF !important;
-  }
-
-  .db-calendar-day-absence {
-    background-color: #D39700 !important;
-  }
-
-  .db-calendar-day-holiday {
-    background-color: #148AED !important;
-  }
-
 }

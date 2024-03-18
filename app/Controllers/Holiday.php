@@ -4,18 +4,25 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\HolidayModel;
+use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\ResponseInterface;
+use ReflectionException;
 
 class Holiday extends BaseController
 {
-    private $holidaymodel;
+    private HolidayModel $holidaymodel;
 
     public function __construct()
     {
         $this->holidaymodel = new HolidayModel();
     }
 
-    public function index()
+    /**
+     * Index of the holiday page
+     *
+     * @return string
+     */
+    public function index(): string
     {
         $data = [
             'table' => $this->holidaymodel->get_table_html()
@@ -28,7 +35,18 @@ class Holiday extends BaseController
         //
     }
 
-    public function create()
+    /**
+     * Creates a new holiday
+     *
+     * Requires:
+     * - holiday-date
+     * - holiday-hours
+     * - holiday-name
+     *
+     * @return RedirectResponse
+     * @throws ReflectionException
+     */
+    public function create(): RedirectResponse
     {
         $date = $this->request->getPost('holiday-date');
         $hours = $this->request->getPost('holiday-hours');
@@ -68,7 +86,16 @@ class Holiday extends BaseController
         return redirect()->to('/holiday');
     }
 
-    public function delete() {
+    /**
+     * Deletes a holiday
+     *
+     * Requires:
+     * - id
+     *
+     * @return ResponseInterface
+     */
+    public function delete(): ResponseInterface
+    {
         $id = $this->request->getPost('id');
         $this->holidaymodel->delete($id);
 

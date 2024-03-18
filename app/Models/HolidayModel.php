@@ -40,7 +40,12 @@ class HolidayModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function get_table_html(){
+    /**
+     * Gets holiday table
+     *
+     * @return string
+     */
+    public function get_table_html(): string {
         $table = get_table_template();
         $table->setHeading(
             'Datum',

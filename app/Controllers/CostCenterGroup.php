@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\CostCenterGroupModel;
 use App\Models\CostCenterModel;
 use CodeIgniter\HTTP\ResponseInterface;
+use ReflectionException;
 
 class CostCenterGroup extends BaseController
 {
@@ -18,7 +19,13 @@ class CostCenterGroup extends BaseController
         $this->costcentermodel = new CostCenterModel();
     }
 
-    public function index() {
+    /**
+     * Index of the costcenter group page
+     *
+     * @return string
+     */
+    public function index(): string
+    {
 
         $data = [
             "table" => $this->costcentergroupmodel->get_table_html()
@@ -29,7 +36,16 @@ class CostCenterGroup extends BaseController
             view('partials/footer');
     }
 
-    public function create()
+    /**
+     * Creates a new costcenter group
+     *
+     * Requires:
+     * - name
+     *
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function create(): ResponseInterface
     {
         $name = $this->request->getPost('name');
         $existing_row = $this->costcentergroupmodel->where('name', $name)->first();
@@ -93,11 +109,6 @@ class CostCenterGroup extends BaseController
         return $this->response->setJSON($return);
     }
 
-    public function update($id, $data)
-    {
-
-    }
-
     /**
      * Deletes costcentergroup
      *
@@ -105,9 +116,9 @@ class CostCenterGroup extends BaseController
      * - id (id of the costcentergroup)
      *
      * @return ResponseInterface
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function delete()
+    public function delete(): ResponseInterface
     {
         $id = $this->request->getPost('id');
         $costcentermodel = new CostCenterModel();

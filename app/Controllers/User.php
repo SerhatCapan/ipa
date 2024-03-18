@@ -15,7 +15,13 @@ class User extends BaseController
         $this->usermodel = new UserModel();
     }
 
-    public function index() {
+    /**
+     * Index of the user page
+     *
+     * @return string
+     */
+    public function index(): string
+    {
         $user_id = $this->request->getCookie('current_user_id');
         $users = $this->usermodel->findAll();
 
@@ -47,9 +53,14 @@ class User extends BaseController
     }
 
     /**
+     * Creates a new user
+     *
+     * Requires:
+     * - name
+     *
      * @throws ReflectionException
      */
-    public function create()
+    public function create(): RedirectResponse
     {
         $name = $this->request->getPost('name');
         $user = $this->usermodel->where('name', $name)->first();
@@ -85,7 +96,13 @@ class User extends BaseController
     }
 
     /**
-     * @return \CodeIgniter\HTTP\RedirectResponse
+     * Updates user
+     *
+     * Requires:
+     * - id
+     * - name
+     *
+     * @return RedirectResponse
      * @throws ReflectionException
      */
     public function update()
@@ -129,12 +146,18 @@ class User extends BaseController
         return redirect()->to('user');
     }
 
-    public function delete()
+    /**
+     * Deletes user
+     *
+     * Requires:
+     * - user (id of user)
+     *
+     * @return RedirectResponse
+     */
+    public function delete(): RedirectResponse
     {
         $id = $this->request->getPost('user');
         $id_user_cookie = $this->request->getCookie('current_user_id');
-        $session = session();
-
         $this->usermodel->delete($id);
         $session = session();
 
@@ -162,7 +185,7 @@ class User extends BaseController
      *
      * @return RedirectResponse
      */
-    public function switch() {
+    public function switch(): RedirectResponse {
         $id = $this->request->getPost('user');
         setcookie('current_user_id', $id, strtotime('+365 days'), '/');
         return redirect()->to('user');

@@ -65,12 +65,12 @@ function get_html_dashboard_card_row($data) {
                 <option value="">Auswählen</option>
                 <?php foreach ($data['costcenters'] as $costcenter) {
                     if ($costcenter['delete'] != 1) { ?>
-                        <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= !empty($costcenter['costcenter_group_name']) ? '[' . $costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($costcenter['name']) ?></option>
+                        <option <?= $data['workhour']['id_costcenter'] === $costcenter['id'] ? 'selected' : '' ?> value="<?= $costcenter['id'] ?>"><?= !empty($costcenter['costcenter_group_name']) ? '[' . $costcenter['costcenter_group_name']  . '] ' : '' ?> <?= esc($costcenter['name']) ?></option>
                     <?php } ?>
                 <?php } ?>
             </select>
         <?php } else { ?>
-            <p data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-select-workhour-costcenter"><?= !empty($deleted_costcenter['costcenter_group_name']) ? '[' . $deleted_costcenter['costcenter_group_name']  . ' ]' : '' ?> <?= esc($deleted_costcenter['name']) ?></p>
+            <p data-workhour-id="<?= $data['workhour']['id'] ?>" data-workhour-date="<?= $data['date'] ?>" class="db-select-workhour-costcenter"><?= !empty($deleted_costcenter['costcenter_group_name']) ? '[' . $deleted_costcenter['costcenter_group_name']  . ']' : '' ?> <?= esc($deleted_costcenter['name']) ?></p>
         <?php } ?>
     </div>
     <div class="uk-width-1-5">

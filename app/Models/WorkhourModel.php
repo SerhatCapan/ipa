@@ -93,21 +93,4 @@ class WorkhourModel extends Model
 
         return $workdays;
     }
-
-    /**
-     * Returns back the calculated sum of the time period
-     *
-     * @param $data array should look like this. If dates arent set, the whole time gets caluclated:
-     *
-     * [
-     *  'date_from' => '2024-01-01",
-     *  'date_to' => '2024-12-31",
-     *  'id_user' => 1
-     * ]
-     *
-     * @return int
-     */
-    public function get_total_workhhours($data) {
-
-    }
 }

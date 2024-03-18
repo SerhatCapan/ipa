@@ -42,7 +42,14 @@ class UserModel extends Model
     protected $afterDelete    = [];
 
 
-    public function user_exist($id) {
+    /**
+     * Checks if user exists
+     *
+     * @param $id
+     * @return bool
+     */
+    public function user_exist($id): bool
+    {
         if ($id === null) {
             return false;
         }
