@@ -7,7 +7,7 @@
     } else { ?>
         <div uk-grid class="uk-grid-small uk-child-width-1-6">
             <div>
-                <input id="db-input-create-workday-date" class="uk-input" type="date" placeholder="Datum" aria-label="Datum" value="<?= $date_from->toLocalizedString('YYYY-MM-d') ?>">
+                <input id="db-input-create-workday-date" class="uk-input" type="date" placeholder="Datum" aria-label="Datum" value="<?= esc($_GET['date_from'] ?? '')  ?>">
             </div>
             <div>
                 <button class="uk-button uk-button-primary" id="db-button-create-workday">Tag erfassen</button>
@@ -30,14 +30,15 @@
                         $data_date_from = current($week['weekdays'])['date'];
                         $data_date_to = end($week['weekdays'])['date'];
                         ?>
-                        <tr data-date-from="<?= $data_date_from ?>" data-date-to="<?= $data_date_to ?>" class="db-calendar-week <?= $week['active_week'] === true ? 'db-calendar-week-selected' : '' ?>">
+                        <tr data-date-from="<?= $data_date_from ?>" data-date-to="<?= $data_date_to ?>" class="db-calendar-week <?= $week['active_week'] === true ? 'db-week-selected' : '' ?>">
                             <?php foreach ($week['weekdays'] as $weekday) { ?>
-                                <td class="db-calendar-day-<?= $weekday['type'] ?>" uk-tooltip="<?= $weekday['tooltip'] ?>"><?= date('j', strtotime($weekday['date'])) ?></td>
+                                <td class="db-day-<?= $weekday['type'] ?>" uk-tooltip="<?= $weekday['tooltip'] ?>"><?= date('j', strtotime($weekday['date'])) ?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>
                     </tbody>
                 </table>
+                <span class="uk-badge db-week-selected">Ausgewählte Woche</span> <span class="uk-badge db-day-workday">Arbeitstag</span> <span class="uk-badge db-day-vacation">Ferien</span> <span class="uk-badge db-day-absence">Absenz</span> <span class="uk-badge db-day-holiday">Feiertag</span>
             </div>
             <div>
                 <h2>Überzeit</h2>
@@ -56,15 +57,14 @@
                 <div uk-grid>
                     <div class="uk-width-1-3">
                         <label class="uk-form-label" for="db-input-read-costcentergroup-date-from">Von *</label>
-                        <label class="uk-form-label" for="db-input-read-costcentergroup-date-from">Von *</label>
                         <div class="uk-form-controls">
-                            <input required class="uk-input" name="costcentergroup-date-from" id="db-input-read-costcentergroup-date-from" type="date" value="<?= $date_from->toLocalizedString('YYYY-MM-d'); ?>">
+                            <input required class="uk-input" name="costcentergroup-date-from" id="db-input-read-costcentergroup-date-from" type="date" value="<?= esc($_GET['date_from'] ?? date('Y-m-d', strtotime('now')))  ?>">
                         </div>
                     </div>
                     <div class="uk-width-1-3">
                         <label class="uk-form-label" for="db-input-read-costcentergroup-date-to">Bis *</label>
                         <div class="uk-form-controls">
-                            <input required class="uk-input" name="costcentergroup-date-to" id="db-input-read-costcentergroup-date-to" type="date" value="<?= $date_to->toLocalizedString('YYYY-MM-d'); ?>">
+                            <input required class="uk-input" name="costcentergroup-date-to" id="db-input-read-costcentergroup-date-to" type="date" value="<?= esc($_GET['date_to'] ?? '')  ?>">
                         </div>
                     </div>
                     <div class="uk-width-1-3">
@@ -73,9 +73,8 @@
                             <select id="db-select-read-costcentergroup" name="costcentergroup" class="db-select-read-costcentergroup uk-select" aria-label="Select">
                                 <option selected disabled value="">Auswählen</option>
                                 <?php foreach ($costcenters as $item) { ?>
-                                    <option data-type="costcenter" value="<?= $item['id'] ?>">(KS) <?= !empty($item['costcenter_group_name']) ? '[' . $item['costcenter_group_name']  . ' ]' : '' ?> <?= $item['name'] ?></option>
+                                    <option data-type="costcenter" value="<?= $item['id'] ?>">(KS) <?= !empty($item['costcenter_group_name']) ? '[' . $item['costcenter_group_name']  . ']' : '' ?> <?= $item['name'] ?></option>
                                 <?php }
-
                                 foreach ($costcentergroups as $item) { ?>
                                     <option data-type="costcenter-group" value="<?= $item['id'] ?>">(KS-G) <?= $item['name'] ?></option>
                                 <?php } ?>
@@ -86,14 +85,8 @@
                         <p>Totale Stunden im Zeitraum: <span id="db-costcentergroup-total-hours-in-time-period">0</span>h</p>
                     </div>
                 </div>
-
             </div>
         </div>
-
-        <!--<span class="uk-badge">Aktuelle Woche</span>
-        <span class="uk-badge">Ferien</span>
-        <span class="uk-badge">Absenz</span>-->
-
         <h2>Tage</h2>
 
         <?php

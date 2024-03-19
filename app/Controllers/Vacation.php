@@ -40,13 +40,15 @@ class Vacation extends BaseController
 
         $table = $this->vacationmodel->get_table_html();
         $vacation = $this->vacationmodel->get_vacation(date('Y-m-d', strtotime('now')));
+        $vacation_credit = $this->vacationcreditmodel->get_vacation_credit_from_date(strtotime('now'));
+
 
         $data = [
             'current_user' => $id_user,
-            'vacation_credit_date_from' => $vacation['vacation_credit']['date_from'],
-            'vacation_credit_date_to' => $vacation['vacation_credit']['date_to'],
-            'vacation_credit' => $vacation['vacation_credit']['credit'],
-            'vacation_remaining_credits' => $vacation['vacation_remaining_credits'],
+            'vacation_credit_date_from' => $vacation['vacation_credit']['date_from'] ?? '',
+            'vacation_credit_date_to' => $vacation['vacation_credit']['date_to']  ?? '',
+            'vacation_credit' => $vacation['vacation_credit']['credit'] ?? '',
+            'vacation_remaining_credits' => $vacation['vacation_remaining_credits'] ?? '',
             'table' => $table
         ];
 

@@ -83,14 +83,14 @@ class VacationModel extends Model
      */
     public function get_table_html(): string
     {
-        $vacation = $this->get_vacation(date('Y-m-d', strtotime('now')));
+        $vacation = $this->findAll();
         $table = get_table_template();
         $table->setHeading([
             'Tag',
             'Stunden'
         ]);
 
-        foreach ($vacation['vacation'] as $day) {
+        foreach ($vacation as $day) {
             $table->addRow(
                 $day['date'],
                 $day['hours'],
